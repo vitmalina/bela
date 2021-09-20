@@ -56,7 +56,7 @@ var tasks = {
     },
 
     specs(cb) {
-        let baseURL = 'http://localhost/bela-tests'
+        let baseURL = 'http://localhost/bela'
         let manifest = 'specs/bela.json'
         let file
         if (fs.existsSync(manifest)) {

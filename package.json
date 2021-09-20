@@ -1,20 +1,20 @@
 {
-  "name": "bela-tests",
+  "name": "bela",
   "version": "1.0.0",
-  "description": "Bela Tests",
+  "description": "Bela Automation",
   "main": "index.html",
   "directories": {
     "doc": "docs"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vitmalina/bela-tests.git"
+    "url": "git+https://github.com/vitmalina/bela.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/vitmalina/bela-tests/issues"
+    "url": "https://github.com/vitmalina/bela/issues"
   },
-  "homepage": "https://github.com/vitmalina/bela-tests#readme",
+  "homepage": "https://github.com/vitmalina/bela#readme",
   "devDependencies": {
     "browserify": "^17.0.0",
     "chai": "^4.3.4",
