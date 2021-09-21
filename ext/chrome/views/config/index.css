@@ -1,0 +1,45 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    line-height: 1.5;
+    font-size: 13px;
+    margin: 0;
+    padding: 10px;
+    background-color: #f2f2f2;
+}
+
+.w2ui-input {
+    font-size: 13px;
+}
+
+.save, .cancel {
+    font-size: 13px;
+    padding: 7px 20px;
+}
+
+#sites {
+    margin: 0px;
+}
+
+.test-suite {
+    margin: 6px 0px 10px 0px;
+    line-height: 1.8;
+}
+
+.test-suite .label {
+    width: 45px;
+    text-align: right;
+    display: inline-block;
+    color: #666;
+}
+
+.test-suite a {
+    color: #5296de;
+    text-decoration: none;
+}
+
+.test-suite a:hover {
+    text-decoration: underline;
+}

@@ -1,0 +1,58 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.task {
+    font-family: verdana;
+    font-size: 11px;
+    padding: 5px 2px;
+}
+
+.task:nth-child(odd) {
+    background-color: #efefef;
+}
+
+.task:nth-child(even) {
+    background-color: #fff;
+}
+
+.task.task-running {
+    background-color: #e9f7e8;
+}
+
+.task.task-done > span.cmd {
+}
+
+.task.task-failed > span.cmd {
+    background-color: #f7e8e8;
+}
+
+.task > span.cmd {
+    min-width: 60px;
+    display: inline-block;
+    color: #666;
+    padding: 1px 4px;
+    border: 1px solid #dedede;
+    border-radius: 4px;
+    box-shadow: 0px 0px 0px 2px white;
+    background-color: #efefef;
+    text-transform: uppercase;
+    font-size: 11px;
+}
+
+.task > span.cmd.new-subject {
+    background-color: #fdf9e1;
+    border-color: #bac170;
+}
+
+.task > span.cmd.assertion {
+    background-color: #e0fcff;
+    border: 1px solid #a9d4ff;
+}
+
+.task > span.cmd.error {
+    background-color: #ffebea;
+    border: 1px solid #ffbcbc;
+}
