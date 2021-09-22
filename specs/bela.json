@@ -1,0 +1,16 @@
+{
+    "start": "manifest",
+    "specs": [
+        "http://localhost/bela/specs/bela/amazon.spec.js",
+        "http://localhost/bela/specs/bela/google.spec.js",
+        "http://localhost/bela/specs/bela/links.spec.js",
+        "http://localhost/bela/specs/bela/local.spec.js",
+        "http://localhost/bela/specs/bela/reload.spec.js",
+        "http://localhost/bela/specs/bela/structure.spec.js",
+        "http://localhost/bela/specs/groups/groups.spec.js",
+        "http://localhost/bela/specs/w2ui/w2grid.spec.js"
+    ],
+    "libs": [
+        "http://localhost/w2ui/demos/specs/w2ui.js"
+    ]
+}
