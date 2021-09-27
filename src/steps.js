@@ -519,8 +519,14 @@ class BelaSteps {
         // options.multiple
         // options.*key (modifiers)
         // options.double
+        // options.positon = 'center'
+
         if (options.delay == null) options.delay = 10
         if (options.multiple == null) options.multiple = false
+        // default second arg is position
+        if (typeof options.args[1] == 'string') {
+            options.position = options.args[1]
+        }
 
         let subj = this.proc.subject
         let win  = this.win
@@ -535,10 +541,6 @@ class BelaSteps {
             altKey: options.altKey || false,
             metaKey: options.metaKey || false,
             button: options.button || 0,
-            x: options.x || 1,
-            y: options.y || 1,
-            clientX: options.clientX || 1,
-            clientY: options.clientY || 1,
             bubbles: true,
             cancelable: true,
             view: this.win
@@ -550,6 +552,20 @@ class BelaSteps {
             if (subj && subj.length > 0) {
                 (function process(subj, index) {
                     let el = subj[index]
+                    let rect = el.getBoundingClientRect()
+                    // default position is center
+                    if (options.x == null && options.y == null && options.position == null) {
+                        options.position = 'center'
+                    }
+                    let { x, y } = (options.position != null
+                        ? runner.getPosition(options.position, rect)
+                        : { x: options.x, y: options.y })
+                    Object.assign(modifiers, {
+                        x: rect.x + x,
+                        y: rect.y + y,
+                        clientX: x,
+                        clientY: y
+                    })
                     sendEvents(el)
                     if (subj.length > index + 1) {
                         setTimeout(() =>{
@@ -581,9 +597,14 @@ class BelaSteps {
         // options.delay
         // options.multiple
         // options.*key (modifiers)
+        // options.positon = 'center'
 
         if (options.delay == null) options.delay = 10
         if (options.multiple == null) options.multiple = false
+        // default second arg is position
+        if (typeof options.args[1] == 'string') {
+            options.position = options.args[1]
+        }
 
         let subj = this.proc.subject
         let win  = this.win
@@ -594,10 +615,6 @@ class BelaSteps {
             altKey: options.altKey || false,
             metaKey: options.metaKey || false,
             button: options.button || 0,
-            x: options.x || 1,
-            y: options.y || 1,
-            clientX: options.clientX || 1,
-            clientY: options.clientY || 1,
             bubbles: true,
             cancelable: true,
             view: this.win
@@ -609,6 +626,20 @@ class BelaSteps {
             if (subj && subj.length > 0) {
                 (function process(subj, index) {
                     let el = subj[index]
+                    let rect = el.getBoundingClientRect()
+                    // default position is center
+                    if (options.x == null && options.y == null && options.position == null) {
+                        options.position = 'center'
+                    }
+                    let { x, y } = (options.position != null
+                        ? runner.getPosition(options.position, rect)
+                        : { x: options.x, y: options.y })
+                    Object.assign(modifiers, {
+                        x: rect.x + x,
+                        y: rect.y + y,
+                        clientX: x,
+                        clientY: y
+                    })
                     sendEvents(el)
                     if (subj.length > index + 1) {
                         setTimeout(() =>{

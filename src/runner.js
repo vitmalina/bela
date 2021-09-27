@@ -756,4 +756,55 @@ class BelaRunner {
             return v.toString(16);
         })
     }
+
+    getPosition(type, rect, ret = { x: 0, y: 0 }) {
+        switch (type) {
+            case 'center': {
+                ret.x = parseInt(rect.width / 2)
+                ret.y = parseInt(rect.height / 2)
+                break
+            }
+            case 'left': {
+                ret.x = 1
+                ret.y = parseInt(rect.height / 2)
+                break
+            }
+            case 'right': {
+                ret.x = rect.width -1
+                ret.y = parseInt(rect.height / 2)
+                break
+            }
+            case 'top': {
+                ret.x = parseInt(rect.width / 2)
+                ret.y = 1
+                break
+            }
+            case 'bottom': {
+                ret.x = parseInt(rect.width / 2)
+                ret.y = rect.height - 1
+                break
+            }
+            case 'top-left': {
+                ret.x = 1
+                ret.y = 1
+                break
+            }
+            case 'top-right': {
+                ret.x = rect.width - 1
+                ret.y = 1
+                break
+            }
+            case 'bottom-left': {
+                ret.x = 1
+                ret.y = rect.height - 1
+                break
+            }
+            case 'bottom-right': {
+                ret.x = rect.width - 1
+                ret.y = rect.height - 1
+                break
+            }
+        }
+        return ret
+    }
 }
