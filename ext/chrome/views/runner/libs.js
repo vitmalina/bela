@@ -4935,7 +4935,7 @@ class BelaSteps {
         if (options.delay == null) options.delay = 10
         if (options.multiple == null) options.multiple = false
         // default second arg is position
-        if (typeof options.args[1] == 'string') {
+        if (options.args && typeof options.args[1] == 'string') {
             options.position = options.args[1]
         }
 
@@ -5013,7 +5013,7 @@ class BelaSteps {
         if (options.delay == null) options.delay = 10
         if (options.multiple == null) options.multiple = false
         // default second arg is position
-        if (typeof options.args[1] == 'string') {
+        if (options.args && typeof options.args[1] == 'string') {
             options.position = options.args[1]
         }
 
@@ -5378,7 +5378,7 @@ class BelaSteps {
                     good += tmp.good
                     total += tmp.total
                 })
-                if (error) {
+                if (error && Object.keys(param).length == 1) {
                     details.error = error.details
                 }
                 Object.assign(details, {
@@ -5409,6 +5409,16 @@ class BelaSteps {
             }
             let negative = false
             switch (param) {
+                case 'have.length': {
+                    if (subj.length != value) {
+                        details = {
+                            msg: 'Incorect length',
+                            details: `Expected length "${value}", but "${subj.length}" found.`,
+                            success: false
+                        }
+                    }
+                    break
+                }
                 case 'have.value': {
                     if (subj.length == 0 || subj.val() != value) {
                         details = {
@@ -5437,6 +5447,7 @@ class BelaSteps {
                     let tmp = check(param.split('.')[1], value)
                     if (tmp.total == 1) {
                         Object.assign(details, { msg: param + ' ...', details: tmp.details })
+                        if (tmp.success === false) details.success = false
                     } else {
                         Object.assign(details, { msg: param + ' ...' }, tmp)
                     }
@@ -5523,9 +5534,11 @@ class BelaSteps {
                 if (!isNaN(prop)) prop = parseFloat(prop)
                 if (!isNaN(real)) real = parseFloat(real)
                 if (['css', 'prop', 'attr'].includes(type) && prop !== real) { // should be !==
-                    res.details = `expected "${val}" to be "${obj[val]}", not "${subj[type](val)}"`
+                    res.details = `Expected "${val}" to be "${obj[val]}", not "${subj[type](val)}"`
                     if (len > 1) {
                         bela.error(`have.${type}`, { assertion: true, details: res.details })
+                    } else {
+                        res.success = false
                     }
                 } else {
                     good++
