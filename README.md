@@ -2,9 +2,13 @@
 
 # Bela Automation
 
-Bela is a tool for automation in a browser
-- Google Chrome extension to write the tests
-- Headless component to integrate your tests into CI/CD pipeline (coming soon)
+Bela is a front-end automation tool for the browser
+- Browser extension where you write and test your automation
+- Headless runner for your tests to integrate with CI/CD pipeline (coming soon)
+
+## Installation
+
+Chromium extension is locatted in `ext/chrome` browser. Install it and you are good to go.
 
 ## Getting started
 
