@@ -5409,6 +5409,23 @@ class BelaSteps {
             }
             let negative = false
             switch (param) {
+                case 'not.exist':
+                    negative = true
+                case 'exist': {
+                    if (value.substr(0, 1) == '@') {
+                        value = runner.proc.scope[value.substr(1)]
+                    }
+                    let count = $(value, runner.win.document).length
+                    if ((negative && count !== 0) || (!negative && count === 0)) {
+                        details = {
+                            msg: `Element(s) should ${negative ? 'not ': ''}exist`,
+                            details: `Expected ${negative ? 'not ': ''}to find element(s) with selector "${value}".`,
+                            success: false
+                        }
+                    }
+                    Object.assign(details, { count, selector: value })
+                    break
+                }
                 case 'have.length': {
                     if (subj.length != value) {
                         details = {
