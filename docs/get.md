@@ -40,7 +40,7 @@ bela
 Remember element and use it later
 ```js
 bela
-    .get('button:contains(Save)').as('saveButton')
+    .let('button:contains(Save)', 'saveButton')
     ...
     .get('@saveButton')
     .click()

@@ -1,6 +1,6 @@
 # closest
 
-Find the closes ancestor relative to the current subject that matches the selector
+Find the closes parent starting at the current subject that matches the selector
 
 ## Syntax
 

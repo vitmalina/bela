@@ -53,8 +53,8 @@ You can add steps dynamically within `then` function. All steps are executes seq
 ```js
 bela
     .get('body')
-    .then(function(subj, win) {
-        if (subj && subj.length > 0) {
+    .then(event => {
+        if (event.subj && event.subj.length > 0) {
             bela
                 .get('body')
                 .invoke('fadeOut', 1500)
@@ -72,35 +72,35 @@ bela
 
 ```js
 bela
-    .then(function(subj, win, runner) {
+    .then(event => {
         console.log('Called once')
         return { success: true, msg: 'All good' } // msg param is optional
     })
-````
+```
 
 ### Call once, return error
 
 ```js
 bela
-    .then(function(subj, win, runner) {
+    .then(event => {
         console.log('Called once')
         return { success: false, error: 'Errro message' }
     })
-````
+```
 OR
 ```js
 bela
-    .then(function(subj, win, runner) {
+    .then(event => {
         console.log('Called once')
         throw new Error('Error message')
     })
-````
+```
 
 ### Call recursively until success or error or timeout is reached
 
 ```js
 bela
-    .then(function(subj, win, runner) {
+    .then(event => {
         this._counter = this._counter || 0
         this._counter++
         console.log(this._counter)
@@ -115,7 +115,7 @@ bela
 Similar way, but with user-defined scope
 ```js
 bela
-    .then(function(subj, win, runner) {
+    .then(event => {
         function func() {
             this.counter++
             console.log('Called ' + this.counter)
@@ -127,12 +127,12 @@ bela
         }
         return func.bind({ counter: 0 })
     }, { timeout: 700 }) // it will fail if tiemout is reached
-````
+```
 
 ### Wait until promise is resolved
 ```js
 bela
-    .then(function(subj, win, runner) {
+    .then(event => {
         return new Promise(function (resolve, reject) { // arrow functions might not always work here
             console.log('Called one time')
             setTimeout(() => {

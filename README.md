@@ -8,7 +8,7 @@ Bela is a front-end automation tool for the browser
 
 ## Installation
 
-Chromium extension is locatted in `ext/chrome` browser. Install it and you are good to go.
+Chromium extension is locatted in `ext/chrome` browser. I have not yet publish it to the Chrome store, as it is not ready, but you can install it manually if you go to Chrome's extension manager, click "Developer mode" and then "Load unpacked" and point to the specified directory.
 
 ## Getting started
 

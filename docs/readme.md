@@ -13,11 +13,10 @@ In order to write meaninful test you need to be able to do 3 things:
 | ------- | ----------- |
 | [open](open.md#open)       | navigate to a url |
 | [get](get.md#get)          | get element on the page |
-| [find](find.md#find)       | find child element within the current subject |
-| [closest](closest.md#closest) | find closest ancestor relative to the current subject |
+| [find](find.md#find)       | find child element(s) within the current subject |
+| [closest](closest.md#closest) | find closest parent starting with the current subject |
 | [then](then.md#then)       | execute a custom function |
 | [wait](wait.md#wait)       | wait for something to happen |
-| [route](route.md#route)    | define a route to watch |
 
 #### Other
 
@@ -27,6 +26,7 @@ In order to write meaninful test you need to be able to do 3 things:
 | [invoke](invoke.md#invoke) | invoke a method on the current subject |
 | [tag](tag.md#tag)          | tag previous command with a message |
 | [let](let.md#let)          | define a variable in the variable scope |
+| [network](network.md#network)  | define a route to watch |
 
 ## Emulate user actions
 

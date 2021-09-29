@@ -1,6 +1,6 @@
 # find
 
-Find one or more DOM elements within current subject. This command can only be used after `.get()` command.
+Find elements within current subject. This command can only be used after `.get()` command.
 
 ## Syntax
 
