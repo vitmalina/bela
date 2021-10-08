@@ -18,6 +18,8 @@ var app = (function () {
         bpClear,    // clear all break points
         stateSave,
         stateRestore,
+        showFrame,
+        hideFrame,
         eval: _eval
     }
 
@@ -33,11 +35,10 @@ var app = (function () {
         let sc = document.createElement('script')
         sc.src = path + 'views/runner/libs.js'
         sc.onload = function() {
+            try { settings = JSON.parse(w2utils.base64decode($('#runner-settings').html())) } catch (e) { }
             styleFrame()
             init()
-            try { settings = JSON.parse(w2utils.base64decode($('#runner-settings').html())) } catch (e) { }
             let proms = []
-            // console.log('SETTINGS', settings)
             proms = proms.concat(addFiles('lib', settings.libs, settings.linkLibs))
             Promise.all(proms)
                 .then((values) => {
@@ -97,6 +98,15 @@ var app = (function () {
                 'border-bottom': '0px',
                 'border-radius': '3px 3px 0px 0px'
             })
+            if (!settings.showRunner) {
+                $('#BELA-Runner', parent.document).css({
+                    'left': '-10px',
+                    'top': '-10px',
+                    'width': '1px',
+                    'height': '1px',
+                    'border': '0px',
+                })
+            }
             $('body > #runner-log').remove()
             $('body').append(`<div id="runner-log">
                 <div style="padding: 5px">
@@ -106,6 +116,28 @@ var app = (function () {
                 </div>
             </div>`)
         }
+    }
+
+    function showFrame() {
+        $('#BELA-Runner', parent.document).css({
+            'left': 'auto',
+            'top': 'auto',
+            'bottom': '0px',
+            'right': '15px',
+            'width': '300px',
+            'height': '70px',
+            'border': '2px solid #9d72b3'
+        })
+    }
+
+    function hideFrame() {
+        $('#BELA-Runner', parent.document).css({
+            'left': '-10px',
+            'top': '-10px',
+            'width': '1px',
+            'height': '1px',
+            'border': '0px',
+        })
     }
 
     function init() {

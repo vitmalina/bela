@@ -11,11 +11,14 @@ $(function () {
     let testQueue
     window.app = {
         init,
+        initLayout,
+        position: 'bottom',
         tabId: chrome.devtools.inspectedWindow.tabId,
         isMac: (String(navigator.userAgent).indexOf('Macintosh') != -1 ? true : false),
         // runner options
         options: {
             linkLibs: true, // if true, libs will be loaded via script tag in bela frame
+            showRunner: false,
             pauseOnError: false,
             autoExpand: true
         },
@@ -63,90 +66,141 @@ $(function () {
         defineLanguage()
         init()
     })
-    window.addEventListener('keydown', function (event) {
-        let toolbar = w2ui.tb_editor
-        // cmd + enter - will reload and run current spec
-        if (event.metaKey && event.keyCode == 13) {
-            getSettings().then(settings => {
-                if (settings.start == 'manifest') {
-                    w2ui.suite.startTime = (new Date()).getTime()
-                    let item = w2ui.suite.get(w2ui.suite.selected)
-                    if (item && item.path) {
-                        app.runner.remove()
-                        w2ui.suite.skipInsertCmd = true // so test would not run twice
-                        reloadSpec(item.path, settings, () => {
-                            app.state.autoRunOnce = true
-                            app.runner.insertFrame(settings)
-                        })
-                    } else {
-                        app.msg('First, select a test which to run.')
-                    }
-                }
-                if (settings.start == 'editor') {
-                    w2ui.suite.startTime = null
-                    // app.runner.clear()
-                    // toolbar.click('save')
-                    app.runner.reset()
-                    w2ui.tb_steps.click('action')
-                    event.preventDefault()
-                    event.stopPropagation()
-                }
-            })
-        }
-    }, true)
-
-    // network listeners
-    chrome.devtools.network.onNavigated.addListener(req => {
-        // console.log('onNavigated: ', req)
-        setTimeout(() => { app.runner.getLocation() }, 100) // timeout is needed to allow init of objects
-    })
-
-    chrome.devtools.network.onRequestFinished.addListener(dtl => {
-        // ignore extension network activity
-        let str = 'chrome-extension://bghiemgahdblmkegfooplghfihfmjjhp'
-        if (String(dtl.request.url).substr(0, str.length) == str) {
-            return
-        }
-        let details = {
-            status: dtl.response.status,
-            method: dtl.request.method,
-            url: dtl.request.url,
-            query: dtl.request.queryString,
-        }
-        if (!app.state.running || !app.state.runnerReady) {
-            app.state.network.push(details)
-        } else {
-            // timeout is needed just if page unloads
-            setTimeout(() => {
-                app.runner.network(details)
-                    .then(dtl => {
-                        if (dtl.ready === false) {
-                            app.state.network.push(details)
-                        }
-                    })
-                    .catch(() => {
-                        app.state.network.push(details)
-                    })
-            }, 1)
-        }
-    })
-    // chrome.devtools.network.onRequestFinished.addListener(req => {
-    //     let str = 'chrome-extension://bghiemgahdblmkegfooplghfihfmjjhp'
-    //     if (String(req.request.url).substr(0, str.length) == str) {
-    //         return
-    //     }
-    //    console.log('onRequestFinished: ', req.request.url)
-    // })
     return
 
     function init() {
         // console.log('DEV TOOLS: init')
         $('#app-container').w2layout(config.layout)
         $().w2sidebar(config.steps)
+        $().w2toolbar(config.tb_editor)
+        $().w2toolbar(config.tb_steps)
+        $().w2toolbar(config.tb_logs)
+        // main toolbar always in main panel
+        w2ui.layout.assignToolbar('main', w2ui.tb_steps)
 
-        w2ui.layout.html('left', '<div id="bela-commands" style="width: 100%; height: 100%"></div>')
+        // at bottom or side
+        if (window.innerWidth > window.innerHeight) {
+            app.position = 'bottom'
+        } else {
+            app.position = 'side'
+        }
+        initLayout()
+
+        chrome.runtime.onMessage.addListener(app.msgProcess)
+        chrome.runtime.onMessageExternal.addListener(app.msgProcess)
+
+        window.addEventListener('keydown', function (event) {
+            let toolbar = w2ui.tb_editor
+            // cmd + enter - will reload and run current spec
+            if (event.metaKey && event.keyCode == 13) {
+                getSettings().then(settings => {
+                    if (settings.start == 'manifest') {
+                        w2ui.suite.startTime = (new Date()).getTime()
+                        let item = w2ui.suite.get(w2ui.suite.selected)
+                        if (item && item.path) {
+                            app.runner.remove()
+                            w2ui.suite.skipInsertCmd = true // so test would not run twice
+                            reloadSpec(item.path, settings, () => {
+                                app.state.autoRunOnce = true
+                                app.runner.insertFrame(settings)
+                            })
+                        } else {
+                            app.msg('First, select a test which to run.')
+                        }
+                    }
+                    if (settings.start == 'editor') {
+                        w2ui.suite.startTime = null
+                        // app.runner.clear()
+                        // toolbar.click('save')
+                        app.runner.reset()
+                        w2ui.tb_steps.click('action')
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                })
+            }
+        }, true)
+
+        window.addEventListener('resize', (event) => {
+            clearTimeout(timer.resize)
+            timer.resize = setTimeout(() => {
+                let width = window.innerWidth
+                let height = window.innerHeight
+                let pos
+                if (width > height) {
+                    pos = 'bottom'
+                } else {
+                    pos = 'side'
+                }
+                if (pos !== app.position) {
+                    app.position = pos
+                    app.initLayout()
+                }
+            }, 100)
+        })
+
+        // network listeners
+        chrome.devtools.network.onNavigated.addListener(req => {
+            // console.log('onNavigated: ', req)
+            setTimeout(() => { app.runner.getLocation() }, 100) // timeout is needed to allow init of objects
+        })
+
+        chrome.devtools.network.onRequestFinished.addListener(dtl => {
+            // ignore extension network activity
+            let str = 'chrome-extension://bghiemgahdblmkegfooplghfihfmjjhp'
+            if (String(dtl.request.url).substr(0, str.length) == str) {
+                return
+            }
+            let details = {
+                status: dtl.response.status,
+                method: dtl.request.method,
+                url: dtl.request.url,
+                query: dtl.request.queryString,
+            }
+            if (!app.state.running || !app.state.runnerReady) {
+                app.state.network.push(details)
+            } else {
+                // timeout is needed just if page unloads
+                setTimeout(() => {
+                    app.runner.network(details)
+                        .then(dtl => {
+                            if (dtl.ready === false) {
+                                app.state.network.push(details)
+                            }
+                        })
+                        .catch(() => {
+                            app.state.network.push(details)
+                        })
+                }, 1)
+            }
+        })
+    }
+
+    function initLayout() {
+        w2ui.layout.html('left', '')
+        w2ui.layout.html('right', '')
+        w2ui.layout.html('top', '')
+        w2ui.layout.html('bottom', '')
+        if (app.position == 'bottom') {
+            w2ui.layout.hide('top', true)
+            w2ui.layout.hide('bottom', true)
+            w2ui.layout.show('left', true)
+            w2ui.layout.show('right', true)
+            w2ui.layout.html('left', '<div id="bela-commands" style="width: 100%; height: 100%"></div>')
+            w2ui.layout.assignToolbar('left', w2ui.tb_editor)
+            w2ui.layout.assignToolbar('right', w2ui.tb_logs)
+        } else {
+            w2ui.layout.show('top', true)
+            w2ui.layout.show('bottom', true)
+            w2ui.layout.hide('left', true)
+            w2ui.layout.hide('right', true)
+            w2ui.layout.html('top', '<div id="bela-commands" style="width: 100%; height: 100%"></div>')
+            w2ui.layout.assignToolbar('top', w2ui.tb_editor)
+            w2ui.layout.assignToolbar('bottom', w2ui.tb_logs)
+        }
         w2ui.layout.html('main', w2ui.steps)
         app.logs.show()
+
         setTimeout(() => {
             let toolbar = w2ui.tb_editor
             getSettings(true).then(settings => {
@@ -177,8 +231,6 @@ $(function () {
                 }
             })
         }, 50)
-        chrome.runtime.onMessage.addListener(app.msgProcess)
-        chrome.runtime.onMessageExternal.addListener(app.msgProcess)
     }
 
     function msgProcess(request, sender, callBack) {
@@ -1107,7 +1159,7 @@ $(function () {
             html += `<div>${log}</div>`
         })
         html += '</div>'
-        w2ui.layout.html('right', html)
+        w2ui.layout.html(app.position == 'bottom' ? 'right' : 'bottom', html)
         $(w2ui.layout.el('right')).scrollTop(10000)
     }
 

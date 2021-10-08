@@ -2,275 +2,275 @@ let config = {
     layout: {
         name: 'layout',
         panels: [
-            { type: 'left', size: '40%', resizable: true,
-                style: 'overflow: hidden; border-right: 1px solid #ddd',
-                toolbar: {
-                    style: 'background-color: #f3f4f5; border-top: 1px solid #fff; border-right: 1px solid #ddd',
-                    tooltip: 'bottom|right',
-                    items: [
-                        { id: 'reload-manifest', icon: 'w2ui-icon-reload', hidden: true },
-                        { id: 'action', type: 'menu-radio', icon: 'icon-type',
-                            selected: 'editor',
-                            text(item) {
-                                let sel = item.get(item.selected)
-                                return sel ? sel.text : '--'
-                            },
-                            overlay: { openAbove: false },
-                            items: [
-                                { id: 'editor', text: 'Editor' },
-                                { id: 'manifest', text: 'Manifest' },
-                                { id: 'break', text: '--' },
-                                { id: 'config', text: 'Configure', group: false, icon: 'icon-cog' }
-                            ]
-                        },
-                        { id: 'break', type: 'break' },
-                        { id: 'run-all', type: 'button', text: 'Run All', icon: 'icon-play', hidden: true },
-                        { id: 'stop-all', type: 'button', text: 'Stop', icon: 'icon-stop', hidden: true },
-                        { id: 'save', type: 'button', text: 'Save', icon: 'w2ui-icon-check', disabled: true,
-                            tooltip(item) {
-                                let text = 'Save test into local cache (ctrl + s)'
-                                if (app.isMac) { text = 'Save test into local cache (⌘S)' }
-                                return text
-                            }
-                        },
-                        { id: 'spacer', type: 'spacer' },
-                        { id: 'insert', type: 'button', text: 'Parse Tests', hidden: true },
-                        { id: 'run-time', type: 'html', html: `<span id="run-time-msg" style="padding-right: 10px">0:00</span>`, hidden: true },
-                        { id: 'auto-run', type: 'html', html: `
-                            <input type="text" tabindex="100" class="hidden" onfocus="$('#auto-run-flag').focus()">
-                            <label class="check-label">
-                                <input type="checkbox" id="auto-run-flag" tabindex="4" style="position: relative; top: 2px; left: -3px;">
-                                <span onmouseover="$(this).w2tag('Auto run current test on page reload', { className: 'w2ui-light', top: -6, position: 'right|left' })"
-                                    onmouseout="$(this).w2tag()">Auto Run</span>
-                            </label>
-                            ` },
-                    ],
-                    onClick(event) {
-                        app.panelAction(event)
-                    },
-                    onRefresh(event) {
-                        // make sure auto run is checked after reload
-                        let isChecked = $('#auto-run-flag').is(':checked')
-                        event.done(() => {
-                            if (isChecked) {
-                                $('#auto-run-flag').prop('checked', true)
-                            }
-                        })
-                    },
-                    onRender(event) {
-                        w2ui.tb_editor = w2ui.layout_left_toolbar // same toolbar
-                    }
+            { type: 'top', size: '30%', resizable: true, style: 'overflow: hidden; border-bottom: 1px solid #ddd' },
+            { type: 'left', size: '40%', resizable: true, style: 'overflow: hidden; border-right: 1px solid #ddd' },
+            { type: 'main', style: 'border-right: 1px solid #ddd' },
+            { type: 'right', size: '-400px', resizable: true, style: 'background-color: #fff;' },
+            { type: 'bottom', size: '30%', resizable: true, style: 'background-color: #fff; border-top: 1px solid #ddd' }
+        ]
+    },
+
+    tb_editor: {
+        name: 'tb_editor',
+        style: 'background-color: #f3f4f5; border-top: 1px solid #fff; border-right: 1px solid #ddd',
+        tooltip: 'bottom|right',
+        items: [
+            { id: 'reload-manifest', icon: 'w2ui-icon-reload', hidden: true },
+            { id: 'action', type: 'menu-radio', icon: 'icon-type',
+                selected: 'editor',
+                text(item) {
+                    let sel = item.get(item.selected)
+                    return sel ? sel.text : '--'
+                },
+                overlay: { openAbove: false },
+                items: [
+                    { id: 'editor', text: 'Editor' },
+                    { id: 'manifest', text: 'Manifest' },
+                    { id: 'break', text: '--' },
+                    { id: 'config', text: 'Configure', group: false, icon: 'icon-cog' }
+                ]
+            },
+            { id: 'break', type: 'break' },
+            { id: 'run-all', type: 'button', text: 'Run All', icon: 'icon-play', hidden: true },
+            { id: 'stop-all', type: 'button', text: 'Stop', icon: 'icon-stop', hidden: true },
+            { id: 'save', type: 'button', text: 'Save', icon: 'w2ui-icon-check', disabled: true,
+                tooltip(item) {
+                    let text = 'Save test into local cache (ctrl + s)'
+                    if (app.isMac) { text = 'Save test into local cache (⌘S)' }
+                    return text
                 }
             },
-            { type: 'main',
-                style: 'border-right: 1px solid #ddd',
-                toolbar: {
-                    style: 'background-color: #f3f4f5; border-top: 1px solid #fff; border-right: 1px solid #ddd',
-                    tooltip: 'bottom|right',
-                    items: [
-                        { id: 'action', type: 'button', action: 'run', tooltip: '', icon: 'icon-play' },
-                        { type: 'break' },
-                        { id: 'step-over', type: 'button', action: 'run', tooltip: 'Step over', icon: 'icon-step-over', disabled: true },
-                        { id: 'step-in', type: 'button', action: 'run', tooltip: 'Step in', icon: 'icon-step-in', disabled: true },
-                        { id: 'step-out', type: 'button', action: 'run', tooltip: 'Step out', icon: 'icon-step-out', disabled: true },
-                        { id: 'break_info', type: 'break', hidden: true },
-                        { id: 'info', type: 'html', html: '...', hidden: true },
-                        { type: 'spacer' },
-                        { id: 'settings', type: 'menu-check', icon: 'icon-cog',
-                            overlay: { openAbove: false },
-                            items: [
-                                { id: 'reset', text: 'Reset', group: false, icon: 'icon-empty' },
-                                { id: 'remove', text: 'Remove Runner', group: false, icon: 'icon-empty' },
-                                { text: '--' },
-                                { id: 'pause-on-error', text: 'Pause On Error' },
-                                { id: 'auto-expand', text: 'Auto Expand/Collapse', checked: true }
-                            ]
-                        }
-                    ],
-                    initAction(action) {
-                        let isTestSelected = w2ui.steps.selected ? true : false
-                        if (isTestSelected) {
-                            this.enable('step-over', 'step-in', 'step-out')
-                        } else {
-                            this.disable('step-over', 'step-in', 'step-out')
-                        }
-                        this.enable('action', 'settings')
-                        app.state.pausing = false
-                        switch(action) {
-                            case 'run':
-                            case 'step-over':
-                            case 'step-in':
-                            case 'step-out':
-                            case 'resume': {
-                                this.set('info', { html: '<span class="cmd running">Running</span>' })
-                                this.show('info', 'break_info')
-                                this.set('action', { action: 'pause', icon: 'icon-pause', tooltip: 'Pause' })
-                                this.disable('step-over', 'step-in', 'step-out')
-                                break
-                            }
-                            case 'pausing':  {
-                                app.state.pausing = true
-                                this.set('info', { html: '<span class="cmd paused">Pausing...</span>' })
-                                this.show('info', 'break_info')
-                                this.disable('action', 'step-over', 'step-in', 'step-out')
-                                break
-                            }
-                            case 'pause': {
-                                this.set('info', { html: '<span class="cmd paused">Paused</span> - <a onclick="app.runner.reset()">Reset</a>' })
-                                this.show('info', 'break_info')
-                                this.set('action', { action: 'run', icon: 'icon-play', tooltip: 'Resume' })
-                                break
-                            }
-                            case 'done': {
-                                this.set('action', { action: 'run', icon: 'icon-play', tooltip: 'Run at selected command' })
-                                this.show('info', 'break_info')
-                                this.set('info', { html: '<span class="cmd">Done</span> - <a onclick="app.runner.reset()">Reset</a>'})
-                                break
-                            }
-                            case 'select': {
-                                break
-                            }
-                            default: {
-                                this.set('action', { action: 'run', icon: 'icon-play', tooltip: 'Run All' })
-                                this.set('info', { html: '' })
-                                this.hide('info', 'break_info')
-                                this.disable('step-over', 'step-in', 'step-out')
-                            }
-                        }
-                    },
-                    resetTestIcons(nodes) {
-                        if (nodes == null) {
-                            nodes = w2ui.steps.nodes
-                        }
-                        if (nodes.length > 0) {
-                            resetIcon(nodes)
-                            w2ui.steps.refresh()
-                        }
-                        function resetIcon(nodes) {
-                            nodes.forEach(node => {
-                                node.icon = 'icon-border-none'
-                                node.text = node.text.replace('<span class="command new-subject">', '<span class="command">')
-                                if (Array.isArray(node.nodes) && node.nodes.length > 0) {
-                                    resetIcon(node.nodes)
-                                }
+            { id: 'spacer', type: 'spacer' },
+            { id: 'insert', type: 'button', text: 'Parse Tests', hidden: true },
+            { id: 'run-time', type: 'html', html: `<span id="run-time-msg" style="padding-right: 10px">0:00</span>`, hidden: true },
+            { id: 'auto-run', type: 'html', html: `
+                <input type="text" tabindex="100" class="hidden" onfocus="$('#auto-run-flag').focus()">
+                <label class="check-label">
+                    <input type="checkbox" id="auto-run-flag" tabindex="4" style="position: relative; top: 2px; left: -3px;">
+                    <span onmouseover="$(this).w2tag('Auto run current test on page reload', { className: 'w2ui-light', top: -6, position: 'right|left' })"
+                        onmouseout="$(this).w2tag()">Auto Run</span>
+                </label>
+                ` },
+        ],
+        onClick(event) {
+            app.panelAction(event)
+        },
+        onRefresh(event) {
+            // make sure auto run is checked after reload
+            let isChecked = $('#auto-run-flag').is(':checked')
+            event.done(() => {
+                if (isChecked) {
+                    $('#auto-run-flag').prop('checked', true)
+                }
+            })
+        }
+    },
+
+    tb_steps: {
+        name: 'tb_steps',
+        style: 'background-color: #f3f4f5; border-top: 1px solid #fff; border-right: 1px solid #ddd',
+        tooltip: 'bottom|right',
+        items: [
+            { id: 'action', type: 'button', action: 'run', tooltip: '', icon: 'icon-play' },
+            { type: 'break' },
+            { id: 'step-over', type: 'button', action: 'run', tooltip: 'Step over', icon: 'icon-step-over', disabled: true },
+            { id: 'step-in', type: 'button', action: 'run', tooltip: 'Step in', icon: 'icon-step-in', disabled: true },
+            { id: 'step-out', type: 'button', action: 'run', tooltip: 'Step out', icon: 'icon-step-out', disabled: true },
+            { id: 'break_info', type: 'break', hidden: true },
+            { id: 'info', type: 'html', html: '...', hidden: true },
+            { type: 'spacer' },
+            { id: 'settings', type: 'menu-check', icon: 'icon-cog',
+                overlay: { openAbove: false },
+                items: [
+                    { id: 'reset', text: 'Reset', group: false, icon: 'icon-empty' },
+                    { id: 'remove', text: 'Remove Runner', group: false, icon: 'icon-empty' },
+                    { text: '--' },
+                    { id: 'show-frm', text: 'Show Runner' },
+                    { id: 'pause-on-error', text: 'Pause On Error' },
+                    { id: 'auto-expand', text: 'Auto Expand/Collapse', checked: true }
+                ]
+            }
+        ],
+        initAction(action) {
+            let isTestSelected = w2ui.steps.selected ? true : false
+            if (isTestSelected) {
+                this.enable('step-over', 'step-in', 'step-out')
+            } else {
+                this.disable('step-over', 'step-in', 'step-out')
+            }
+            this.enable('action', 'settings')
+            app.state.pausing = false
+            switch(action) {
+                case 'run':
+                case 'step-over':
+                case 'step-in':
+                case 'step-out':
+                case 'resume': {
+                    this.set('info', { html: '<span class="cmd running">Running</span>' })
+                    this.show('info', 'break_info')
+                    this.set('action', { action: 'pause', icon: 'icon-pause', tooltip: 'Pause' })
+                    this.disable('step-over', 'step-in', 'step-out')
+                    break
+                }
+                case 'pausing':  {
+                    app.state.pausing = true
+                    this.set('info', { html: '<span class="cmd paused">Pausing...</span>' })
+                    this.show('info', 'break_info')
+                    this.disable('action', 'step-over', 'step-in', 'step-out')
+                    break
+                }
+                case 'pause': {
+                    this.set('info', { html: '<span class="cmd paused">Paused</span> - <a onclick="app.runner.reset()">Reset</a>' })
+                    this.show('info', 'break_info')
+                    this.set('action', { action: 'run', icon: 'icon-play', tooltip: 'Resume' })
+                    break
+                }
+                case 'done': {
+                    this.set('action', { action: 'run', icon: 'icon-play', tooltip: 'Run at selected command' })
+                    this.show('info', 'break_info')
+                    this.set('info', { html: '<span class="cmd">Done</span> - <a onclick="app.runner.reset()">Reset</a>'})
+                    break
+                }
+                case 'select': {
+                    break
+                }
+                default: {
+                    this.set('action', { action: 'run', icon: 'icon-play', tooltip: 'Run All' })
+                    this.set('info', { html: '' })
+                    this.hide('info', 'break_info')
+                    this.disable('step-over', 'step-in', 'step-out')
+                }
+            }
+        },
+        resetTestIcons(nodes) {
+            if (nodes == null) {
+                nodes = w2ui.steps.nodes
+            }
+            if (nodes.length > 0) {
+                resetIcon(nodes)
+                w2ui.steps.refresh()
+            }
+            function resetIcon(nodes) {
+                nodes.forEach(node => {
+                    node.icon = 'icon-border-none'
+                    node.text = node.text.replace('<span class="command new-subject">', '<span class="command">')
+                    if (Array.isArray(node.nodes) && node.nodes.length > 0) {
+                        resetIcon(node.nodes)
+                    }
+                })
+            }
+        },
+        onClick(event) {
+            let action = event.target
+            let ready = (event) => {
+                if (action == 'pause') {
+                    this.initAction('pausing')
+                } else if (!event.success && event.noFrame) {
+                    if (app.state.wait4Reload == null) {
+                        setTimeout(() => {
+                            app.runner.remove()
+                            app.getSettings().then(settings => {
+                                app.runner.insertFrame(settings)
                             })
-                        }
-                    },
-                    onClick(event) {
-                        let action = event.target
-                        let ready = (event) => {
-                            if (action == 'pause') {
-                                this.initAction('pausing')
-                            } else if (!event.success && event.noFrame) {
-                                if (app.state.wait4Reload == null) {
-                                    setTimeout(() => {
-                                        app.runner.remove()
-                                        app.getSettings().then(settings => {
-                                            app.runner.insertFrame(settings)
-                                        })
-                                    }, 1)
-                                }
-                            }
-                        }
-                        switch (event.target) {
-                            case 'action':
-                                action = event.item.action
-                                if (action == 'run') {
-                                    app.state.running = true
-                                    // update suite if any
-                                    let id = app.state.currentTestId
-                                    if (id) {
-                                        w2ui.suite.update(id, { class: '', icon: 'icon-border-none' })
-                                    }
-                                    // if step selected
-                                    let stepId = w2ui.steps.selected
-                                    if (stepId) {
-                                        app.runner.action('run', { stepId, options: app.options }, ready)
-                                    } else {
-                                        app.runner.action('run', { options: app.options }, ready)
-                                    }
-                                }
-                                if (action == 'pause') {
-                                    app.state.running = false
-                                    this.initAction('pausing')
-                                    app.runner.action('pause', {}, ready)
-                                } else if (action == 'resume') {
-                                    app.runner.action('resume', { options: app.options }, ready)
-                                }
-                                break
-
-                            case 'step-in':
-                            case 'step-out':
-                            case 'step-over': {
-                                let stepId = w2ui.steps.selected
-                                let item = w2ui.steps.get(stepId)
-                                let expanded = item.expanded
-                                let hasSubSteps = item.nodes && item.nodes.length > 0 ? true : false
-                                // if (event.target == 'step-in') expanded = true
-                                w2ui.steps.resetSubIcons(stepId)
-                                app.runner.action(event.target, { stepId, expanded, hasSubSteps }, ready)
-                                break
-                            }
-
-                            case 'settings:remove':
-                                app.runner.remove()
-                                break
-
-                            case 'settings:reset':
-                                app.runner.reset()
-                                break
-
-                            case 'settings:pause-on-error':
-                                app.options.pauseOnError = event.subItem.checked
-                                break
-
-                            case 'settings:auto-expand':
-                                app.options.autoExpand = event.subItem.checked
-                                break
-                        }
-                    },
-                    onRender(event) {
-                        w2ui.tb_steps = w2ui.layout_main_toolbar // same toolbar
-                    }
-                }
-            },
-            { type: 'right', size: '-400px', resizable: true, style: 'background-color: #fff;',
-                toolbar: {
-                    style: 'background-color: #f3f4f5; border-top: 1px solid #fff; border-right: 1px solid #ddd',
-                    tooltip: 'bottom|right|left',
-                    items: [
-                        {
-                            id: 'search-html', type: 'html',
-                            html: `
-                                <div id="search-help">
-                                    <span class="icon icon-search"></span>
-                                    <input placeholder="Search help...." tabindex="50">
-                                </div>
-                            `
-                        },
-                        { type: 'spacer' },
-                        { id: 'clear-logs', type: 'button', icon: 'icon-cross', text: 'Logs', tooltip: 'Clear logs' },
-                        { type: 'break' },
-                        { id: 'reload', type: 'button', icon: 'w2ui-icon-reload', tooltip: 'Reload Bela Automation' }
-                    ],
-                    onClick(event) {
-                        switch (event.target) {
-                            case 'clear-logs':
-                                app.logs.clear()
-                                break
-                            case 'reload':
-                                window.location.reload()
-                                break
-                            default:
-                                app.panelAction(event)
-                        }
-                    },
-                    onRender(event) {
-                        w2ui.tb_editor = w2ui.layout_left_toolbar // same toolbar
+                        }, 1)
                     }
                 }
             }
-        ]
+            switch (event.target) {
+                case 'action':
+                    action = event.item.action
+                    if (action == 'run') {
+                        app.state.running = true
+                        // update suite if any
+                        let id = app.state.currentTestId
+                        if (id) {
+                            w2ui.suite.update(id, { class: '', icon: 'icon-border-none' })
+                        }
+                        // if step selected
+                        let stepId = w2ui.steps.selected
+                        if (stepId) {
+                            app.runner.action('run', { stepId, options: app.options }, ready)
+                        } else {
+                            app.runner.action('run', { options: app.options }, ready)
+                        }
+                    }
+                    if (action == 'pause') {
+                        app.state.running = false
+                        this.initAction('pausing')
+                        app.runner.action('pause', {}, ready)
+                    } else if (action == 'resume') {
+                        app.runner.action('resume', { options: app.options }, ready)
+                    }
+                    break
+
+                case 'step-in':
+                case 'step-out':
+                case 'step-over': {
+                    let stepId = w2ui.steps.selected
+                    let item = w2ui.steps.get(stepId)
+                    let expanded = item.expanded
+                    let hasSubSteps = item.nodes && item.nodes.length > 0 ? true : false
+                    // if (event.target == 'step-in') expanded = true
+                    w2ui.steps.resetSubIcons(stepId)
+                    app.runner.action(event.target, { stepId, expanded, hasSubSteps }, ready)
+                    break
+                }
+
+                case 'settings:remove':
+                    app.runner.remove()
+                    break
+
+                    case 'settings:reset':
+                        app.runner.reset()
+                        break
+
+                case 'settings:show-frm':
+                    app.options.showRunner = event.subItem.checked
+                    app.runner.exec(app.options.showRunner ? 'app.showFrame()' : 'app.hideFrame()')
+                    break
+
+                case 'settings:pause-on-error':
+                    app.options.pauseOnError = event.subItem.checked
+                    break
+
+                case 'settings:auto-expand':
+                    app.options.autoExpand = event.subItem.checked
+                    break
+            }
+        }
+    },
+
+    tb_logs: {
+        name: 'tb_logs',
+        style: 'background-color: #f3f4f5; border-top: 1px solid #fff; border-top: 1px solid #ddd',
+        tooltip: 'bottom|right|left',
+        items: [
+            {
+                id: 'search-html', type: 'html',
+                html: `
+                    <div id="search-help">
+                        <span class="icon icon-search"></span>
+                        <input placeholder="Search help...." tabindex="50">
+                    </div>
+                `
+            },
+            { type: 'spacer' },
+            { id: 'clear-logs', type: 'button', icon: 'icon-cross', text: 'Logs', tooltip: 'Clear logs' },
+            { type: 'break' },
+            { id: 'reload', type: 'button', icon: 'w2ui-icon-reload', tooltip: 'Reload Bela Automation' }
+        ],
+        onClick(event) {
+            switch (event.target) {
+                case 'clear-logs':
+                    app.logs.clear()
+                    break
+                case 'reload':
+                    window.location.reload()
+                    break
+                default:
+                    app.panelAction(event)
+            }
+        }
     },
 
     steps: {
