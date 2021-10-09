@@ -2,17 +2,17 @@ let config = {
     layout: {
         name: 'layout',
         panels: [
-            { type: 'top', size: '30%', resizable: true, style: 'overflow: hidden; border-bottom: 1px solid #ddd' },
-            { type: 'left', size: '40%', resizable: true, style: 'overflow: hidden; border-right: 1px solid #ddd' },
+            { type: 'top', size: '33%', resizable: true, style: 'overflow: hidden; border-bottom: 1px solid #ddd' },
+            { type: 'left', size: '400px', resizable: true, style: 'overflow: hidden; border-right: 1px solid #ddd' },
             { type: 'main', style: 'border-right: 1px solid #ddd' },
             { type: 'right', size: '-400px', resizable: true, style: 'background-color: #fff;' },
-            { type: 'bottom', size: '30%', resizable: true, style: 'background-color: #fff; border-top: 1px solid #ddd' }
+            { type: 'bottom', size: '33%', resizable: true, style: 'background-color: #fff' }
         ]
     },
 
     tb_editor: {
         name: 'tb_editor',
-        style: 'background-color: #f3f4f5; border-top: 1px solid #fff; border-right: 1px solid #ddd',
+        style: 'background-color: #f3f4f5; border-top: 1px solid #fff; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd',
         tooltip: 'bottom|right',
         items: [
             { id: 'reload-manifest', icon: 'w2ui-icon-reload', hidden: true },
@@ -68,7 +68,7 @@ let config = {
 
     tb_steps: {
         name: 'tb_steps',
-        style: 'background-color: #f3f4f5; border-top: 1px solid #fff; border-right: 1px solid #ddd',
+        style: 'background-color: #f3f4f5; border-top: 1px solid #fff; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd',
         tooltip: 'bottom|right',
         items: [
             { id: 'action', type: 'button', action: 'run', tooltip: '', icon: 'icon-play' },
@@ -242,7 +242,7 @@ let config = {
 
     tb_logs: {
         name: 'tb_logs',
-        style: 'background-color: #f3f4f5; border-top: 1px solid #fff; border-top: 1px solid #ddd',
+        style: 'background-color: #f3f4f5; border-top: 1px solid #fff; border-bottom: 1px solid #e2e2e2; border-right: 1px solid #ddd',
         tooltip: 'bottom|right|left',
         items: [
             {
@@ -277,6 +277,7 @@ let config = {
         name: 'steps',
         levelPadding: 15,
         tabIndex: 30,
+        style: 'border-top: 1px solid #fff; border-bottom: 1px solid #ddd',
         handle: {
             size: 18,
             style: `height: 22px; width: 20px; margin-top: 0px; margin-left: -15px;`,
@@ -618,7 +619,7 @@ let config = {
         handle: {
             size: 18
         },
-        style: 'background-color: #fff!important',
+        style: 'background-color: #fff!important; border-top: 1px solid #fff; border-bottom: 0px solid #efefef',
         menu: [
             { id: 'run', icon: 'icon-play', text: 'Run' },
             { id: 'edit', icon: 'icon-type', text: 'View Source &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' },
