@@ -59,11 +59,11 @@ var app = (function () {
                         if (linkLibs) {
                             let sc = document.createElement('script')
                             sc.id = id + '-' + ind
-                            if (['http', 'https'].indexOf(file.split(':')[0]) == -1 && settings.baseURL) {
-                                // if (file.substr(0, 1) != '/' && settings.baseURL == parent.location.href.substr(0, settings.baseURL.length)) {
+                            if (['http', 'https'].indexOf(file.split(':')[0]) == -1 && settings.specsBaseURL) {
+                                // if (file.substr(0, 1) != '/' && settings.specsBaseURL == parent.location.href.substr(0, settings.specsBaseURL.length)) {
                                 //     file = parent.location.pathname + file
                                 // }
-                                file = settings.baseURL + file
+                                file = settings.specsBaseURL + file
                             }
                             sc.src = file
                             sc.onerror = function () { reject(`Error loading ${file}`) }

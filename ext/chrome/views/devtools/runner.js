@@ -38,7 +38,13 @@ $(function () {
                     let loc = document.location
                     manifest = meta[0].content
                     if (['http', 'https'].indexOf(manifest.split(':')[0]) == -1) {
-                        manifest = loc.protocol + '//' + loc.host + manifest
+                        if (manifest.substr(0, 1) == '/') {
+                            manifest = loc.protocol + '//' + loc.host + manifest
+                        } else {
+                            let tmp = loc.pathname.substr(1).split('/') // remove leading slash
+                            tmp.pop()
+                            manifest = loc.protocol + '//' + loc.host + (tmp.length > 0 ? '/' + tmp.join('/') : '') + '/' + manifest
+                        }
                     }
                 }
                 return manifest

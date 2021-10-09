@@ -516,6 +516,14 @@ let config = {
                     attr: 'style="width: 250px;"'
                 }
             },
+            {
+                field: 'specsBaseURL', type: 'text',
+                html: {
+                    label: 'Specs Base URL', span: 4,
+                    style: 'margin-bottom: 15px',
+                    attr: 'style="width: 250px;"'
+                }
+            },
             { field: 'libs', type: 'map',
                 html: {
                     label: 'Libraries (any JS lib to include)', span: -1,
@@ -540,14 +548,14 @@ let config = {
         ],
         onChange(event) {
             event.done(() => {
-                this.show('manifest', 'baseURL', 'commands', 'libs')
+                this.show('manifest', 'baseURL', 'specsBaseURL', 'commands', 'libs')
                 let start = this.record.start || { id: 'editor' }
                 switch(start.id) {
                     case 'editor':
                         this.hide('manifest')
                         break
                     case 'manifest':
-                        this.hide('baseURL', 'commands', 'libs')
+                        this.hide('baseURL', 'specsBaseURL', 'commands', 'libs')
                         break
                 }
             })
@@ -603,6 +611,7 @@ let config = {
                         }
                         if (!data.manifest) data.manifest = '' // force clear
                         if (!data.baseURL) data.baseURL = '' // force clear
+                        if (!data.specsBaseURL) data.specsBaseURL = '' // force clear
                         app.message()
                         app.saveSettings(data)
                         form.render()
@@ -714,6 +723,7 @@ let config = {
                             app.saveSettings({
                                 start: 'editor',
                                 baseURL: app.manifest.baseURL,
+                                specsBaseURL: app.manifest.specsBaseURL,
                                 libs: app.manifest.libs,
                                 editorCode: w2utils.base64encode(code)
                             }).then(() => {

@@ -7,7 +7,7 @@ $(function () {
     require.config({ paths: { 'vs': '/views/libs/monaco-editor/vs' }});
     let mocaco
     let timer = {}
-    let defaults = { "start": "editor", "baseURL": "" }
+    let defaults = { "start": "editor", "baseURL": "", "specsBaseURL": "" }
     let testQueue
     window.app = {
         init,
@@ -702,7 +702,7 @@ $(function () {
             toolbar.hide('stop-all', 'run-time')
 
             app.manifest.libs = []   // so that librarits will not reload twice
-            app.manifest.baseURL = ''
+            app.manifest.specsBaseURL = ''
             getSettings().then(settings => {
                 app.logs.add(`***** Reload MANIFEST "${settings.manifest}" *****`)
                 if (settings.manifest) {
@@ -712,7 +712,7 @@ $(function () {
                         .done(data => {
                             // remember custom and libs
                             app.manifest.libs = data ? data.libs : []
-                            app.manifest.baseURL = data ? data.baseURL : ''
+                            app.manifest.specsBaseURL = data ? data.specsBaseURL : ''
                             if (app.manifest.libs.length > 0) {
                                 getSettings(true) // will reload libaraies
                             }
@@ -731,7 +731,7 @@ $(function () {
                                             isLoaded()
                                         })
                                         .fail(xhr => {
-                                            let msg = `Error loading spec "${data.specs[i]}" from the manifest "${settings.manifest}".`
+                                            let msg = `Error loading spec "${url}" from the manifest "${settings.manifest}".`
                                             app.msg(msg)
                                             app.logs.add(msg, true)
                                             isLoaded()
@@ -980,7 +980,7 @@ $(function () {
         // if manifest, then baseURL/libs come from manifest
         if (settings.start == 'manifest') {
             settings.libs = app.manifest.libs || []
-            settings.baseURL = app.manifest.baseURL || ''
+            settings.specsBaseURL = app.manifest.specsBaseURL || ''
         }
         settings.linkLibs = app.options.linkLibs // if false, libs will be linked
         Object.assign(settings, app.options)
@@ -1314,14 +1314,21 @@ $(function () {
     }
 
     function prepareURL(url, settings) {
-        let baseURL = settings.start == 'editor'
-            ? settings.baseURL
-            : app.manifest.baseURL
-        if (['http', 'https'].indexOf(url.split(':')[0]) == -1 && baseURL) {
-            // if (url.substr(0, 1) != '/' && baseURL == app.runner.loc.href.substr(0, baseURL.length)) {
-            //     url = app.runner.loc.pathname + url
-            // }
-            url = baseURL + url
+        let loc = app.runner.loc
+        let specsBaseURL = settings.start == 'editor'
+            ? settings.specsBaseURL
+            : app.manifest.specsBaseURL
+        if (['http', 'https'].indexOf(url.split(':')[0]) == -1) {
+            if (['http', 'https'].indexOf(specsBaseURL.split(':')[0]) == -1) {
+                if (!specsBaseURL) {
+                    let tmp = loc.pathname.substr(1).split('/') // remove leading slash
+                    tmp.pop()
+                    specsBaseURL = loc.protocol + '//' + loc.host + (tmp.length > 0 ? '/' + tmp.join('/') : '')
+                } else {
+                    specsBaseURL = loc.protocol + '//' + loc.host +  specsBaseURL
+                }
+            }
+            url = specsBaseURL + url
         }
         return url
     }
