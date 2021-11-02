@@ -30,6 +30,7 @@ $(function () {
             running: false,         // indicates if tests are running
             pausing: false,         // attempting to pause
             wait4Reload: null,      // restore after page reload
+            showResults: null,
             network: []
         },
         manifest: {},       // info about manifest file and tests
@@ -51,6 +52,8 @@ $(function () {
         saveSettings,
         reloadSpec,
         updateTimerMsg,
+        showResults,
+        resetResults,
         logs: {
             items: [],
             add: logsAdd,
@@ -372,7 +375,6 @@ $(function () {
                 let event = request.event
                 let cmd   = event.type + ':' + event.phase
                 let item  = event.type == 'command' ? w2ui.steps.get(event.target) : null
-                let isExpanded
                 // console.log('DEV TOOLS: runner-event', event, cmd, item)
                 // debugger
                 switch(cmd) {
@@ -396,6 +398,9 @@ $(function () {
                         if (app.cursorPos) {
                             app.editor.focus()
                             app.editor.setPosition(app.cursorPos)
+                        }
+                        if (app.state.showResults) {
+                            showResults()
                         }
                         break
                     }
@@ -1244,12 +1249,21 @@ $(function () {
                     _clear()
                 }
                 function _clear() {
-                    w2ui.steps.emptyMsg = 'No Commands'
-                    app.runner.clear()
                     // ony function body
                     let code = func.substr(func.indexOf('{') + 1, func.lastIndexOf('}') - func.indexOf('{') - 1)
-                    app.manifest.code = code
                     app.manifest.path = item.path
+                    if (item.results) {
+                        app.manifest.code = ''
+                        app.state.showResults = {
+                            steps: item.steps,
+                            results: item.results
+                        }
+                    } else {
+                        app.manifest.code = code
+                        app.state.showResults = null
+                    }
+                    w2ui.steps.emptyMsg = 'No Commands'
+                    app.runner.clear()
                     if (!w2ui.suite.skipInsertCmd) {
                         app.state.autoRunOnce = start ? true : false
                         app.panelAction({ target: 'insert-cmd' })
@@ -1279,6 +1293,8 @@ $(function () {
                     class: 'not-started',
                     icon: 'icon-border-none'
                 })
+                delete nd.results
+                delete nd.steps
             }
             if (nd.nodes && nd.nodes.length > 0) {
                 w2ui.suite.update(nd.id, {
@@ -1298,6 +1314,8 @@ $(function () {
                 class: errors.length > 0 ? 'task-failed' : 'task-done',
                 icon: errors.length > 0 ? 'icon-cross' : 'icon-check'
             })
+            item.results = app.results
+            item.steps = w2ui.steps.nodes
             // mark parent as done/fail
             let all = item.parent.nodes.map(it => it.class)
             let ok = all.filter(it => (it=='task-done'))
@@ -1331,5 +1349,29 @@ $(function () {
             url = specsBaseURL + url
         }
         return url
+    }
+
+    function showResults() {
+        let tb = w2ui.tb_steps
+        app.results = app.state.showResults.results
+        w2ui.steps.nodes = app.state.showResults.steps
+        w2ui.steps.refresh()
+        tb.disable(...tb.get())
+        tb.set('info', { html: 'Results - <a onclick="app.resetResults()">Reset</a>' })
+        tb.show('info')
+        tb.enable('info')
+    }
+
+    function resetResults() {
+        app.state.showResults = null
+        let sel = w2ui.suite.selected
+        let nd = w2ui.suite.get(sel)
+        w2ui.suite.update(sel, {
+            class: 'not-started',
+            icon: 'icon-file-xml'
+        })
+        delete nd.results
+        delete nd.steps
+        w2ui.suite.click(nd.id)
     }
 })

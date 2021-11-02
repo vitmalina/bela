@@ -92,6 +92,9 @@ let config = {
             }
         ],
         initAction(action) {
+            if (app.state.showResults) {
+                return
+            }
             let isTestSelected = w2ui.steps.selected ? true : false
             if (isTestSelected) {
                 this.enable('step-over', 'step-in', 'step-out')
