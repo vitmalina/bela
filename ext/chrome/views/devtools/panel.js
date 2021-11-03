@@ -780,6 +780,13 @@ $(function () {
                 let sel = w2ui.suite.selected
                 w2ui.suite.unselect(sel)
                 app.suite.process(spec, data).then(() => {
+                    let nd = w2ui.suite.get(sel)
+                    w2ui.suite.update(nd.id, {
+                        class: 'not-started',
+                        icon: 'icon-file-xml'
+                    })
+                    delete nd.results
+                    delete nd.steps
                     w2ui.suite.click(sel)
                     app.updateTimerMsg()
                     app.logs.add(`Spec "${spec}" reloaded.`)
