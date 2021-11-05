@@ -4410,8 +4410,6 @@ class BelaRunner {
     }
 }
 class BelaSteps {
-
-    // define variables
     let(key, options) {
         let data = {}
         let opt = options.args[1]
@@ -4447,14 +4445,14 @@ class BelaSteps {
         return { msg, details: data }
     }
 
-    // similar to let, but with type = network
-    // network('@lenta', 'http://lenta.ru')
-    // network('@wiki', { method: 'GET', url: 'https://en.wikipedia.org*' })
-    // network({
-    //     '@param1': 'http://w2ui.com',
-    //     '@param2': { method: 'POST', url: 'https://w2ui.com' }
-    // })
     network(key, options) {
+        // similar to let, but with type = network
+        // network('@lenta', 'http://lenta.ru')
+        // network('@wiki', { method: 'GET', url: 'https://en.wikipedia.org*' })
+        // network({
+        //     '@param1': 'http://w2ui.com',
+        //     '@param2': { method: 'POST', url: 'https://w2ui.com' }
+        // })
         let urls = {}
         let opt  = options.args[1]
         if (typeof key == 'string') {
@@ -4495,34 +4493,11 @@ class BelaSteps {
         return { msg, details: urls }
     }
 
-    listen(key, options = {}) {
-
+    listen() {
+        // todo: should listen to network requests
     }
 
-    // deprecated
-    // as(key, options) {
-    //     // ignore @ sign if first
-    //     if (key.substr(0, 1) === '@') {
-    //         key = key.substr(1)
-    //     }
-    //     let ret = {}
-    //     let res = this.proc.results[this.proc.previous.id]
-    //     this.proc.scope = this.proc.scope || {}
-    //     if (this.proc.previous && this.proc.previous.cmd == 'network') {
-    //         this.proc.scope[key] = {
-    //             type: 'network',
-    //             path: res.path
-    //         }
-    //         ret.msg = `${key}=${res.path}`
-    //     } else {
-    //         this.proc.scope[key] = this.proc.subject
-    //         ret.msg = `${key}=@subject`
-
-    //     }
-    //     return ret
-    // }
-
-    break(key, options) {
+    break() {
         // jump to last task in the group
         this.proc.index = this.proc.steps.length
         return { success: true, details: 'Exit current "begin"' }
@@ -4540,8 +4515,8 @@ class BelaSteps {
         return Object.assign({ success: false, error: text }, options)
     }
 
-    pause(options = {}) {
-        this.pause('<span class="bela-alert">paused!</span>')
+    pause() {
+        this.pause('Paused.')
     }
 
     open(url, options = {}) {
@@ -4596,8 +4571,8 @@ class BelaSteps {
         return this.bela.steps.open.call(this, this.win.location.href, options)
     }
 
-    // jQuery
     get(selector, options = {}) {
+        // returns jQuery subject
         let result = this.proc.current ? this.proc.current.result : {}
         selector = String(selector)
         result.selector = selector
@@ -4616,8 +4591,8 @@ class BelaSteps {
         }
     }
 
-    // jQuery
     find(selector, options = {}) {
+        // returns jQuery subject
         let result = this.proc.current ? this.proc.current.result : {}
         result.selector = selector
         if (selector == null || selector === '') {
@@ -4638,8 +4613,8 @@ class BelaSteps {
         }
     }
 
-    // jQuery
     closest(selector, options = {}) {
+        // returns jQuery subject
         let result = this.proc.current ? this.proc.current.result : {}
         result.selector = selector
         if (selector == null || selector === '') {
@@ -5352,8 +5327,8 @@ class BelaSteps {
         return result
     }
 
-    // does not wait
     should(param, options) {
+        // does not wait
         let subj = this.proc.subject
         let details = {}
         if (param != null) {
