@@ -583,6 +583,8 @@ class BelaSteps {
 
         let subj = this.proc.subject
         let win  = this.win
+        let result = this.proc.current.result
+        let obj = this
         let events = Array.isArray(param) ? param : [param]
         let modifiers = {
             ctrlKey: options.ctrlKey || false,
@@ -615,13 +617,13 @@ class BelaSteps {
                         clientX: x,
                         clientY: y
                     })
+                    result.details = Object.assign({}, modifiers)
+                    delete result.details.view // otherwise circular JSON
                     sendEvents(el)
                     if (subj.length > index + 1) {
-                        setTimeout(() =>{
-                            process(subj, index + 1)
-                        }, options.delay)
+                        setTimeout(() => { process(subj, index + 1) }, options.delay || 0)
                     } else {
-                        resolve()
+                        setTimeout(() => { resolve() }, options.delay || 0)
                     }
                 })(subj, 0)
             } else {
@@ -640,6 +642,62 @@ class BelaSteps {
             }
         })
         return prom
+    }
+
+    drag(options) {
+        // options.divX, options.divY - the rest as in trigger
+        let { divX, divY, stepX, stepY, step, delay, ...rest } = options
+        if (delay == null) delay = 0
+        if (divX == null) divX = 0
+        if (divY == null) divY = 0
+        options = rest
+        bela
+            .tag('drag & drop')
+            .trigger('mouseenter', options)
+            .trigger('mouseover', options)
+            .trigger('mousedown', options)
+            .then((event) => {
+                let { clientX, clientY } = event.self.proc.previous.result.details
+                let finalX = clientX + divX
+                let finalY = clientY + divY
+                if (stepX == null && step != null) stepX = step
+                if (stepY == null && step != null) stepY = step
+                if (stepX == null && stepY == null) {
+                    bela.trigger('mousemove', { x: finalX, y: finalY })
+                        .tag(`mousemove(${finalX - clientX}, ${finalY - clientY})`)
+                } else {
+                    let currX = clientX
+                    let currY = clientY
+                    let cnt = 0
+                    stepX = Math.abs(stepX) * (divX >= 0 ? 1 : -1)
+                    stepY = Math.abs(stepY) * (divY >= 0 ? 1 : -1)
+                    // if (divX < 0) debugger
+                    while ((currX != finalX || currY != finalY) && cnt < 500) {
+                        cnt++
+                        if ((divX >= 0 && currX < finalX) || (divX < 0 && currX > finalX)) {
+                            currX += stepX
+                            if ((currX > finalX && divX >= 0) || (currX < finalX && divX < 0)) currX = finalX
+                        } else {
+                            currX = finalX
+                        }
+                        if ((divY >= 0 && currY < finalY) || (divY < 0 && currY > finalY)) {
+                            currY += stepY
+                            if ((currY > finalY && divY >= 0) || (currY < finalY && divY < 0)) currY = finalY
+                        } else {
+                            currY = finalY
+                        }
+                        bela.trigger('mousemove', { x: currX, y: currY, delay })
+                            .tag(`mousemove(${currX - clientX}, ${currY - clientY})`)
+                    }
+                    if (currX != finalX || currY <= finalY) {
+                        bela.trigger('mousemove', { x: finalX, y: finalY })
+                            .tag(`mousemove(${finalX - clientX}, ${finalY - clientY})`)
+                    }
+                }
+            }, options)
+            .tag(`drag, divX=${divX}, divY=${divY}`)
+            .trigger('mouseup', options)
+            .trigger('click', options)
     }
 
     type(text, options = {}) {
