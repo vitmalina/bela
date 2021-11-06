@@ -129,7 +129,7 @@ class BelaSteps {
                 return { success: false, msg: `Undefined ${options.args[0]}` }
             }
         }
-        this.proc.current.result.details = go_url
+        this.proc.current.result.url = go_url
         if (options.msg) {
             this.proc.current.result.msg = options.msg
         }
@@ -139,7 +139,7 @@ class BelaSteps {
                 this.win.location = go_url
             }
             result.reloaded = true
-            return { repeat: true, details: go_url }
+            return { repeat: true, url: go_url }
         }
         if (this.win.location.href == go_url && (options.force || options.reload)) {
             // runner/index.js sets this up
@@ -246,6 +246,7 @@ class BelaSteps {
             }
         }
         let res = $(selector, this.win.document)
+        let cond = 'exists'
         if (options.args.length == 2 && res.length > 0) {
             let func = options.args[1]
             if (typeof func != 'function') {
@@ -259,34 +260,42 @@ class BelaSteps {
                 return { success: false, details: 'Third argument should be a function' }
             }
             switch (options.args[1]) {
+                case 'exist':
                 case 'exists':
                     if (res.length > 0) {
                         func.call(this, { subj: res, win: this.win, self: this, scope: this.proc.scope })
-                        return { success: true, details: 'Element exists' }
+                        return { success: true, msg: 'Condition met', details: 'Element exists' }
                     }
                     break
+                case 'not.exist':
                 case 'not.exists':
+                case 'does.not.exists':
+                    cond = 'does not exist'
                     if (res.length == 0) {
                         func.call(this, { subj: res, win: this.win, self: this, scope: this.proc.scope })
-                        return { success: true, details: 'Element does not exist' }
+                        return { success: true, msg: 'Condition met', details: 'Element does not exist' }
                     }
                     break
                 case 'visible':
-                    if (res.css('display') !== 'none' && res.css('opacity') !== 0) {
+                case 'is.visible':
+                    cond = 'exists and is visible'
+                    if (res.length > 0 && res.css('display') !== 'none' && res.css('opacity') !== 0) {
                         func.call(this, { subj: res, win: this.win, self: this, scope: this.proc.scope })
-                        return { success: true, details: 'Element is visible' }
+                        return { success: true, msg: 'Condition met', details: 'Element is visible' }
                     }
                     break
                 case 'not.visible':
-                    if (res.css('display') === 'none' || res.css('opacity') === 0) {
+                case 'is.not.visible':
+                    cond = 'exists and is not visible'
+                    if (res.length > 0 && res.css('display') === 'none' || res.css('opacity') === 0) {
                         func.call(this, { subj: res, win: this.win, self: this, scope: this.proc.scope })
-                        return { success: true, details: 'Element is not visible' }
+                        return { success: true, msg: 'Condition met', details: 'Element is not visible' }
                     }
                     break
 
             }
         }
-        return { success: true, details: 'Condition is not met'}
+        return { success: true, msg: `Condition is not met`, details: `If "${selector}" ${cond} then execute function.` }
     }
 
     then(callback, options = {}) {
@@ -363,7 +372,7 @@ class BelaSteps {
                         this.proc.waiting.splice(0)
                         return { success: false, error: errors[0], details: errors }
                     }
-                    result.msg = 'Network: ' + names.join(', ')
+                    result.msg = `Network: ${names.length} urls`
                     result.details = this.proc.waiting
                     break
                 }
@@ -371,7 +380,7 @@ class BelaSteps {
                     if (param[0] == '@') {
                         param = this.proc.scope[param.substr(1)]
                         if (typeof param != 'string') {
-                            result.details = `Define variable ${options.args[0]} using "let" command as a string.`
+                            result.details = `Define variable ${options.args[0]} using "let" command.`
                             return { success: false, msg: `Undefined ${options.args[0]}`}
                         }
                         options.type = 'dom.change'
@@ -380,7 +389,8 @@ class BelaSteps {
                         // assume it is a selector
                         options.type = 'dom.change'
                         result.selector = param
-                        result.msg = `Element(s) "${options.args[1]}" ${options.args[2] != null ? options.args[2] : ''}`
+                        result.msg = `${options.args[1]} = "${options.args[2] != null ? options.args[2] : ''}"`
+                        result.details = `Wait for "${param}" "${options.args[1]}" "${options.args[2] != null ? options.args[2] : ''}"`
                     }
                 }
             }
@@ -505,6 +515,7 @@ class BelaSteps {
 
         let subj = this.proc.subject
         let win  = this.win
+        let result = this.proc.current.result
         let events = ['mousemove', 'mouseover', 'mousedown', 'mouseup', 'click']
         if (options.double) {
             events.push('mousedown', 'mouseup', 'click')
@@ -541,13 +552,23 @@ class BelaSteps {
                         clientX: x,
                         clientY: y
                     })
+                    result.modifiers = Object.assign({}, modifiers)
+                    delete result.modifiers.view // otherwise circular JSON
                     sendEvents(el)
                     if (subj.length > index + 1) {
-                        setTimeout(() =>{
+                        setTimeout(() => {
                             process(subj, index + 1)
-                        }, options.delay)
+                        }, options.delay || 0)
                     } else {
-                        resolve()
+                        setTimeout(() => {
+                            resolve({
+                                msg: 'ok',
+                                events: events.join(', '),
+                                multiple: options.multiple,
+                                delay: options.delay,
+                                position: options.position
+                            })
+                        }, options.delay || 0)
                     }
                 })(subj, 0)
             } else {
@@ -617,13 +638,22 @@ class BelaSteps {
                         clientX: x,
                         clientY: y
                     })
-                    result.details = Object.assign({}, modifiers)
-                    delete result.details.view // otherwise circular JSON
+                    result.modifiers = Object.assign({}, modifiers)
+                    delete result.modifiers.view // otherwise circular JSON
                     sendEvents(el)
                     if (subj.length > index + 1) {
-                        setTimeout(() => { process(subj, index + 1) }, options.delay || 0)
+                        setTimeout(() => {
+                            process(subj, index + 1)
+                        }, options.delay || 0)
                     } else {
-                        setTimeout(() => { resolve() }, options.delay || 0)
+                        setTimeout(() => {
+                            resolve({
+                                msg: param,
+                                multiple: options.multiple,
+                                delay: options.delay,
+                                position: options.position
+                            })
+                        }, options.delay || 0)
                     }
                 })(subj, 0)
             } else {
@@ -657,7 +687,7 @@ class BelaSteps {
             .trigger('mouseover', options)
             .trigger('mousedown', options)
             .then((event) => {
-                let { clientX, clientY } = event.self.proc.previous.result.details
+                let { clientX, clientY } = event.self.proc.previous.result.modifiers
                 let finalX = clientX + divX
                 let finalY = clientY + divY
                 if (stepX == null && step != null) stepX = step
@@ -671,7 +701,6 @@ class BelaSteps {
                     let cnt = 0
                     stepX = Math.abs(stepX) * (divX >= 0 ? 1 : -1)
                     stepY = Math.abs(stepY) * (divY >= 0 ? 1 : -1)
-                    // if (divX < 0) debugger
                     while ((currX != finalX || currY != finalY) && cnt < 500) {
                         cnt++
                         if ((divX >= 0 && currX < finalX) || (divX < 0 && currX > finalX)) {
@@ -1027,10 +1056,11 @@ class BelaSteps {
         function process(param, value) {
             let details = {
                 success: true,
-                msg: `${param} = "${value}"`
+                msg: `${param} = "${value}"`,
+                details: `Subject should "${param}" ${value ? `"${value}"` : ''}`
             }
             let negative = false
-            switch (param) {
+            switch (param.toLowerCase()) {
                 case 'not.exist':
                     negative = true
                 case 'exist': {
@@ -1040,7 +1070,7 @@ class BelaSteps {
                     let count = $(value, runner.win.document).length
                     if ((negative && count !== 0) || (!negative && count === 0)) {
                         details = {
-                            msg: `Element(s) should ${negative ? 'not ': ''}exist`,
+                            msg: `Element(s) should ${negative ? 'not ': ''} exist`,
                             details: `Expected ${negative ? 'not ': ''}to find element(s) with selector "${value}".`,
                             success: false
                         }
@@ -1052,7 +1082,7 @@ class BelaSteps {
                     if (subj.length != value) {
                         details = {
                             msg: 'Incorect length',
-                            details: `Expected length "${value}", but "${subj.length}" found.`,
+                            details: `Expected length ${value}, but ${subj.length} found.`,
                             success: false
                         }
                     }
@@ -1085,10 +1115,10 @@ class BelaSteps {
                 case 'have.css': {
                     let tmp = check(param.split('.')[1], value)
                     if (tmp.total == 1) {
-                        Object.assign(details, { msg: param + ' ...', details: tmp.details })
+                        Object.assign(details, { msg: tmp.msg || param, details: tmp.details })
                         if (tmp.success === false) details.success = false
                     } else {
-                        Object.assign(details, { msg: param + ' ...' }, tmp)
+                        Object.assign(details, { msg: param }, tmp)
                     }
                     break
                 }
@@ -1122,7 +1152,7 @@ class BelaSteps {
                         } else {
                             Object.assign(details, {
                                 success: false,
-                                details: !negative
+                                details: negative
                                     ? `Cannot find text "${val}" within element.`
                                     : `Found text "${val}" within element.`
                             })
@@ -1133,7 +1163,9 @@ class BelaSteps {
                     })
                     if (value.length == 1) {
                         Object.assign(details, {
-                            details: `Found text "${value}" within element.`,
+                            details: negative
+                                ? `Cannot find text "${value}" within element.`
+                                : `Found text "${value}" within element.`,
                             msg: `${param} "${value}"`,
                             total: undefined,
                             good: undefined
@@ -1173,17 +1205,21 @@ class BelaSteps {
                 if (!isNaN(prop)) prop = parseFloat(prop)
                 if (!isNaN(real)) real = parseFloat(real)
                 if (['css', 'prop', 'attr'].includes(type) && prop !== real) { // should be !==
-                    res.details = `Expected "${val}" to be "${obj[val]}", not "${subj[type](val)}"`
+                    res.details = `Expected subject's "${val}" to be "${obj[val]}", not "${subj[type](val)}"`
                     if (len > 1) {
-                        bela.error(`have.${type}`, { assertion: true, details: res.details })
+                        bela.error(`have.${type.toUpperCase()}, ${val}="${obj[val]}"`, { assertion: true, details: res.details })
                     } else {
+                        res.msg = `have.${type.toUpperCase()}, ${val}="${obj[val]}"`
                         res.success = false
                     }
                 } else {
                     good++
-                    res.details = `"${val}" is "${obj[val]}"`
+                    res.details = `Subject's "${val}" should be "${obj[val]}"`
                     if (len > 1) {
-                        bela.log(`have.${type}`, { assertion: true, details: res.details })
+                        bela.log(`have.${type.toUpperCase()}, ${val}="${obj[val]}"`, { assertion: true, details: res.details })
+                    } else {
+                        res.msg = `have.${type.toUpperCase()}, ${val}="${obj[val]}"`
+                        res.success = false
                     }
                 }
             })

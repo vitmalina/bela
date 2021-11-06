@@ -380,6 +380,10 @@ class BelaRunner {
             this.runNext()
         })
         .catch((error) => {
+            if (error.name == 'TypeError') {
+                // JS error in promise
+                console.error(error)
+            }
             clearTimers()
             let parentIds = []
             this.proc.parents.forEach(parent => { parent.error = true; parentIds.push(parent.steps[parent.index].id) })
@@ -760,27 +764,27 @@ class BelaRunner {
     getPosition(type, rect, ret = { x: 0, y: 0 }) {
         switch (type) {
             case 'center': {
-                ret.x = parseInt(rect.width / 2)
-                ret.y = parseInt(rect.height / 2)
+                ret.x = Math.floor(parseInt(rect.width / 2))
+                ret.y = Math.floor(parseInt(rect.height / 2))
                 break
             }
             case 'left': {
                 ret.x = 1
-                ret.y = parseInt(rect.height / 2)
+                ret.y = Math.floor(parseInt(rect.height / 2))
                 break
             }
             case 'right': {
                 ret.x = rect.width -1
-                ret.y = parseInt(rect.height / 2)
+                ret.y = Math.floor(parseInt(rect.height / 2))
                 break
             }
             case 'top': {
-                ret.x = parseInt(rect.width / 2)
+                ret.x = Math.floor(parseInt(rect.width / 2))
                 ret.y = 1
                 break
             }
             case 'bottom': {
-                ret.x = parseInt(rect.width / 2)
+                ret.x = Math.floor(parseInt(rect.width / 2))
                 ret.y = rect.height - 1
                 break
             }

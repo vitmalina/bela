@@ -374,7 +374,7 @@ let config = {
                         <div class="cmd-details">
                         <table class="param-details">`
                     if ($.isPlainObject(res)) {
-                        Object.keys(res).forEach(key => {
+                        Object.keys(res).sort().forEach(key => {
                             if (['success', 'step'].includes(key)) return
                             let val = res[key]
                             if (Array.isArray(val)) {
