@@ -4713,7 +4713,11 @@ class BelaSteps {
         return { success: true, msg: `Condition is not met`, details: `If "${selector}" ${cond} then execute function.` }
     }
 
-    then(callback, options = {}) {
+    then(func, options = {}) {
+        // .then(func)
+        // .then('message', func)
+        // .then(func, arg1, arg2, ...) -- first argument of func is alaways event
+
         let result = this.proc.current ? this.proc.current.result : {}
         let edata = {
             subj: this.proc.subject,
@@ -4721,12 +4725,13 @@ class BelaSteps {
             self: this,
             scope: this.proc.scope
         }
-        if (typeof callback == 'string' && typeof options.args[1] == 'function') {
-            result.msg = callback
-            callback = options.args[1]
+        if (typeof func == 'string' && typeof options.args[1] == 'function') {
+            result.msg = func
+            func = options.args[1]
+            options.args = options.args.splice(1)
         }
-        if (typeof callback == 'function') {
-            return callback.call(this, edata)
+        if (typeof func == 'function') {
+            return func.call(this, edata, ...options.args.splice(1))
         } else {
             return { success: false, msg: 'First or second argument should be a function' }
         }
