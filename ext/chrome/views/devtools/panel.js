@@ -57,6 +57,7 @@ $(function () {
         logs: {
             items: [],
             add: logsAdd,
+            append: logsAppend,
             show: logsShow,
             clear: logsClear
         },
@@ -113,6 +114,7 @@ $(function () {
                     }
                     if (settings.start == 'editor') {
                         w2ui.suite.startTime = null
+                        w2ui.suite.testStartTime = null
                         // app.runner.clear()
                         // toolbar.click('save')
                         app.runner.reset()
@@ -279,6 +281,7 @@ $(function () {
                         if (autoRun) {
                             if (settings.start == 'editor') {
                                 w2ui.suite.startTime = null
+                                w2ui.suite.testStartTime = null
                                 app.runner.insertFrame(settings)
                             }
                             if (settings.start == 'manifest') {
@@ -414,6 +417,7 @@ $(function () {
                         break
                     }
                     case 'pause:before': {
+                        w2ui.steps.startTime = null
                         w2ui.tb_steps.initAction('pause')
                         app.state.running = false
                         let next = w2ui.steps.get(event.next.id)
@@ -890,6 +894,9 @@ $(function () {
             case 'stop-all': {
                 testQueue = []
                 w2ui.suite.running = false
+                w2ui.steps.startTime = null
+                w2ui.suite.startTime = null
+                w2ui.suite.testStartTime = null
                 toolbar.hide('stop-all', 'run-time')
                 toolbar.show('run-all', 'auto-run')
                 let action = w2ui.tb_steps.get('action').action
@@ -1160,6 +1167,11 @@ $(function () {
         app.logs.show()
     }
 
+    function logsAppend(text) {
+        app.logs.items[app.logs.items.length - 1] += text
+        app.logs.show()
+    }
+
     function logsShow() {
         let toolbar = w2ui.tb_editor
         let selection = w2ui.tb_editor.get('action').selected
@@ -1233,11 +1245,26 @@ $(function () {
             toolbar.hide('stop-all', 'run-time')
             toolbar.show('run-all', 'auto-run')
             if (w2ui.suite.startTime) {
-                app.logs.add(`Finished (${w2utils.interval((new Date()).getTime() - w2ui.suite.startTime)}).`)
+                if (w2ui.suite.testStartTime) {
+                    let int = w2utils.interval((new Date()).getTime() - w2ui.suite.testStartTime)
+                    app.logs.append(` - <span class="run-time">${int}</span>`)
+                }
+                app.logs.add(`Finished -
+                    <span class="run-time">
+                        ${w2utils.interval((new Date()).getTime() - w2ui.suite.startTime)}
+                    </span>`)
             } else {
-                app.logs.add('Steps done')
+                let log = 'Steps done'
+                if (w2ui.steps.startTime) {
+                    let int = w2utils.interval((new Date()).getTime() - w2ui.steps.startTime)
+                    log += ` - <span class="run-time">${int}</span>`
+                }
+                app.logs.add(log)
+
             }
+            w2ui.steps.startTime = null
             w2ui.suite.startTime = null
+            w2ui.suite.testStartTime = null
             clearInterval(timer.runTimeMsg)
             return
         }
@@ -1275,6 +1302,11 @@ $(function () {
                         app.state.autoRunOnce = start ? true : false
                         app.panelAction({ target: 'insert-cmd' })
                         if (start) {
+                            if (w2ui.suite.testStartTime) {
+                                let int = w2utils.interval((new Date()).getTime() - w2ui.suite.testStartTime)
+                                app.logs.append(` - <span class="run-time">${int}</span>`)
+                            }
+                            w2ui.suite.testStartTime = (new Date()).getTime()
                             app.logs.add(`Start test "${item.text}"`)
                             w2ui.suite.update(item.id, { class: 'task-running', icon: 'icon-border-none'})
                             w2ui.suite.scrollIntoView(item.id, true)

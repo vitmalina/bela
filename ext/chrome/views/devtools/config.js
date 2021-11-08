@@ -184,6 +184,7 @@ let config = {
                     action = event.item.action
                     if (action == 'run') {
                         app.state.running = true
+                        w2ui.steps.startTime = (new Date()).getTime()
                         // update suite if any
                         let id = app.state.currentTestId
                         if (id) {

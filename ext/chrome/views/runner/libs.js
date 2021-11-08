@@ -4582,6 +4582,7 @@ class BelaSteps {
         result.selector = selector
         if (selector.substr(0, 1) === '@') {
             selector = this.proc.scope[selector.substr(1)]
+            result.selector += ' = ' + selector
             if (typeof selector != 'string') {
                 result.details = `Define variable ${options.args[0]} using "let" command as a string.`
                 return { success: false, msg: `Undefined ${options.args[0]}` }

@@ -372,24 +372,28 @@ var w2utils = (function ($) {
         return amount + ' ' + type + (amount > 1 ? 's' : '');
     }
 
-    function interval (value) {
-        var ret = '';
-        if (value < 1000) {
-            ret = "< 1 sec";
+    function interval(value) {
+        let ret = ''
+        if (value < 100) {
+            ret = '< 0.01 sec'
+        } else if (value < 1000) {
+            ret = (Math.floor(value / 10) / 100) + ' sec'
+        } else if (value < 10000) {
+            ret = (Math.floor(value / 100) / 10) + ' sec'
         } else if (value < 60000) {
-            ret = Math.floor(value / 1000) + " secs";
+            ret = Math.floor(value / 1000) + ' secs'
         } else if (value < 3600000) {
-            ret = Math.floor(value / 60000) + " mins";
+            ret = Math.floor(value / 60000) + ' mins'
         } else if (value < 86400000) {
-            ret = Math.floor(value / 3600000 * 10) / 10 + " hours";
+            ret = Math.floor(value / 3600000 * 10) / 10 + ' hours'
         } else if (value < 2628000000) {
-            ret = Math.floor(value / 86400000 * 10) / 10 + " days";
+            ret = Math.floor(value / 86400000 * 10) / 10 + ' days'
         } else if (value < 3.1536e+10) {
-            ret = Math.floor(value / 2628000000 * 10) / 10 + " months";
+            ret = Math.floor(value / 2628000000 * 10) / 10 + ' months'
         } else {
-            ret = Math.floor(value / 3.1536e+9) / 10 + " years";
+            ret = Math.floor(value / 3.1536e+9) / 10 + ' years'
         }
-        return ret;
+        return ret
     }
 
     function date (dateStr) {
