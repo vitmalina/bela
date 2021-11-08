@@ -402,6 +402,7 @@ class BelaSteps {
             }
         }
 
+        let negative = false
         switch (options.type) {
             case 'timer': {
                 return new Promise((resolve, reject) => {
@@ -442,6 +443,14 @@ class BelaSteps {
             case 'dom.change': {
                 let res = $(param, this.win.document)
                 switch (options.args[1]) {
+                    case 'not.to.have.text':
+                        negative = true
+                    case 'to.have.text': {
+                        if ((!negative && res.text() !== options.args[2]) || (negative && res.text() === options.args[2])) {
+                            return { repeat: true }
+                        }
+                        break
+                    }
                     case 'to.have.class': {
                         result.count = res.length
                         if (!res.hasClass(options.args[2])) {
@@ -461,7 +470,8 @@ class BelaSteps {
                         if (res.length == 0 || res.css('display') == 'none' || res.css('opacity') != 1) {
                             return { repeat: true }
                         }
-                        result.details = `Element(s) are visible visible (display != 'none' || opactiy == 1)`
+                        result.msg = `${options.args[1]}`
+                        result.details = `Element(s) are visible if (display != 'none' || opactiy == 1)`
                         result.count = res.length
                         break
                     }
@@ -470,7 +480,8 @@ class BelaSteps {
                         if (!(res.length == 0 || res.css('display') == 'none' || res.css('opacity') == 0)) {
                             return { repeat: true }
                         }
-                        result.details = `Element(s) are not visible visible (display == 'none' || opactiy == 0)`
+                        result.msg = `${options.args[1]}`
+                        result.details = `Element(s) are not visible if (display == 'none' || opactiy == 0)`
                         result.count = res.length
                         break
                     }
