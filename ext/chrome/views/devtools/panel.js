@@ -903,7 +903,7 @@ $(function () {
                 if (action == 'pause') {
                     w2ui.tb_steps.click('action')
                 }
-                app.logs.add(`Run stopped.`)
+                app.logs.add(`Test run interrupted.`)
                 clearInterval(timer.runTimeMsg)
                 break
             }
@@ -1199,7 +1199,8 @@ $(function () {
             w2ui.suite.running = true
             toolbar.hide('run-all', 'auto-run')
             toolbar.show('stop-all', 'run-time')
-            app.logs.add(`Run ${ids.length} test(s).`)
+            app.logs.add(`RUN ${ids.length} test(s).`)
+            w2ui.suite.count = { pass: 0, fail: 0 }
             w2ui.suite.startTime = (new Date()).getTime()
             timer.runTimeMsg = setInterval(() => {
                 let val = (new Date()).getTime() - w2ui.suite.startTime
@@ -1245,14 +1246,15 @@ $(function () {
             toolbar.hide('stop-all', 'run-time')
             toolbar.show('run-all', 'auto-run')
             if (w2ui.suite.startTime) {
-                if (w2ui.suite.testStartTime) {
-                    let int = w2utils.interval((new Date()).getTime() - w2ui.suite.testStartTime)
-                    app.logs.append(` - <span class="run-time">${int}</span>`)
+                let pass = '<span class="run-success">All PASS!</span>'
+                if (w2ui.suite.count.fail !== 0) {
+                    pass = `<span class="run-success">pass=${w2ui.suite.count.pass}</span>,
+                            <span class="run-error">failed=${w2ui.suite.count.fail}</span>`
                 }
-                app.logs.add(`Finished -
+                app.logs.add(`FINISHED -
                     <span class="run-time">
                         ${w2utils.interval((new Date()).getTime() - w2ui.suite.startTime)}
-                    </span>`)
+                    </span>, ${pass}`)
             } else {
                 let log = 'Steps done'
                 if (w2ui.steps.startTime) {
@@ -1302,10 +1304,6 @@ $(function () {
                         app.state.autoRunOnce = start ? true : false
                         app.panelAction({ target: 'insert-cmd' })
                         if (start) {
-                            if (w2ui.suite.testStartTime) {
-                                let int = w2utils.interval((new Date()).getTime() - w2ui.suite.testStartTime)
-                                app.logs.append(` - <span class="run-time">${int}</span>`)
-                            }
                             w2ui.suite.testStartTime = (new Date()).getTime()
                             app.logs.add(`Start test "${item.text}"`)
                             w2ui.suite.update(item.id, { class: 'task-running', icon: 'icon-border-none'})
@@ -1353,6 +1351,23 @@ $(function () {
                 class: errors.length > 0 ? 'task-failed' : 'task-done',
                 icon: errors.length > 0 ? 'icon-cross' : 'icon-check'
             })
+            let testFailed
+            if (errors.length > 0) {
+                testFailed = true
+                w2ui.suite.count.fail++
+            } else {
+                testFailed = false
+                w2ui.suite.count.pass++
+            }
+            if (w2ui.suite.testStartTime) {
+                let int = w2utils.interval((new Date()).getTime() - w2ui.suite.testStartTime)
+                app.logs.append(` - <span class="run-time">${int}</span>
+                    ${testFailed
+                        ? ' - <span class="run-error">failed</span>'
+                        : '- <span class="run-success">ok</span>'
+                    }`)
+            }
+
             item.results = app.results
             item.steps = w2ui.steps.nodes
             // mark parent as done/fail

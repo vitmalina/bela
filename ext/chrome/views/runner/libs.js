@@ -5432,7 +5432,11 @@ class BelaSteps {
             if (typeof param == 'object') {
                 let total = 0, good = 0, error
                 Object.keys(param).forEach(key => {
-                    let tmp = process(key, param[key])
+                    // remove digits, "*.XXXXX" at the end
+                    // not.contain.text.1
+                    // not.contain.text.2
+                    // ...
+                    let tmp = process(key.replace(/\.\d{1,5}$/g, '').toLowerCase(), param[key])
                     if (tmp.success === false && error == null) {
                         error = tmp
                     }
@@ -5459,7 +5463,7 @@ class BelaSteps {
                 })
             }
             if (typeof param == 'string') {
-                let tmp = process(param, options.args[1])
+                let tmp = process(param.toLowerCase(), options.args[1])
                 if (tmp.total != null) {
                     details = {
                         success: tmp.good === tmp.total,
@@ -5481,7 +5485,7 @@ class BelaSteps {
                 details: `Subject should "${param}" ${value ? `"${value}"` : ''}`
             }
             let negative = false
-            switch (param.toLowerCase()) {
+            switch (param) {
                 case 'not.exist':
                     negative = true
                 case 'exist': {
@@ -5544,10 +5548,12 @@ class BelaSteps {
                     break
                 }
                 case 'have.text': {
-                    if (subj.length == 0 || subj.text() != value) {
+                    // seems to be a bug in jquery where it introduces extra spaces and new lines
+                    let txt = subj.text().replace(/\n/g, '').replace(/\s\s+/g, ' ')
+                    if (subj.length == 0 || txt != value) {
                         details = {
                             msg: 'Incorect text',
-                            details: `Expected text "${value}", but "${subj.text()}" found.`,
+                            details: `Expected text "${value}", but "${txt}" found.`,
                             success: false
                         }
                     }
@@ -5561,22 +5567,24 @@ class BelaSteps {
                     }
                     details = { total: value.length, good: 0 }
                     value.forEach(val => {
-                        if (subj.length > 0 &&
-                            ((!negative && subj.text().indexOf(val) != -1)    // text is contained
-                            || (negative && subj.text().indexOf(val) == -1))  // text is not contained
-                        ) {
-                            Object.assign(details, { success: true, details: '' })
+                        // seems to be a bug in jquery where it introduces extra spaces and new lines
+                        let txt = subj.text().replace(/\n/g, '').replace(/\s\s+/g, ' ')
+                        let isThere = txt.indexOf(val) != -1
+                        let msg = ''
+
+                        if (!negative && isThere)  msg = 'Text found.'
+                        if (!negative && !isThere) msg = 'Text not found.'
+                        if (negative && isThere)   msg = 'Text found, but it should not exist.'
+                        if (negative && !isThere)  msg = 'Text not found.'
+
+                        if (subj.length > 0 && ((isThere && !negative) || (!isThere && negative))) {
+                            Object.assign(details, { success: true, details: msg })
                             details.good++
                             if (value.length > 1) {
                                 bela.log(`${param} = "${val}"`, { assertion: true })
                             }
                         } else {
-                            Object.assign(details, {
-                                success: false,
-                                details: negative
-                                    ? `Cannot find text "${val}" within element.`
-                                    : `Found text "${val}" within element.`
-                            })
+                            Object.assign(details, { success: false, details: msg })
                             if (value.length > 1) {
                                 bela.error(`${param} = "${val}"`, { assertion: true, details: details.details })
                             }
@@ -5584,9 +5592,6 @@ class BelaSteps {
                     })
                     if (value.length == 1) {
                         Object.assign(details, {
-                            details: negative
-                                ? `Cannot find text "${value}" within element.`
-                                : `Found text "${value}" within element.`,
                             msg: `${param} "${value}"`,
                             total: undefined,
                             good: undefined
