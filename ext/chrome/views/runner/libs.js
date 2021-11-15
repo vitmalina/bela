@@ -4932,6 +4932,7 @@ class BelaSteps {
     }
 
     click(options = {}) {
+        // don't allow selector as first arg, it would interfeer with grid click
         // options.delay
         // options.multiple
         // options.*key (modifiers)
@@ -5437,6 +5438,8 @@ class BelaSteps {
 
     should(param, options) {
         // does not wait
+        // should('exists', selector)
+        // should('not.exists', selector)
         let subj = this.proc.subject
         let details = {}
         if (param != null) {
