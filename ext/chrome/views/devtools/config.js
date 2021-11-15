@@ -791,6 +791,7 @@ let config = {
                 console.log('running')
                 return
             }
+            app.resetResults()
             let item = this.get(event.target)
             if (item.func) {
                 app.runTests([event.target], true)
