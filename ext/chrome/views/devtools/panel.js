@@ -778,6 +778,8 @@ $(function () {
     }
 
     function reloadSpec(spec, settings, cb) {
+        w2ui.suite.startTime = null
+        w2ui.suite.testStartTime = null
         let url = prepareURL(`${spec}${spec.indexOf('?') != -1 ? '&' : '?'}${(new Date()).getTime()}`, settings)
         $.get(url)
             .done((data) => {
