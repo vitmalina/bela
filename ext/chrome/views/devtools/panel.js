@@ -14,7 +14,7 @@ $(function () {
         initLayout,
         position: 'bottom',
         tabId: chrome.devtools.inspectedWindow.tabId,
-        isMac: (String(navigator.userAgent).indexOf('Macintosh') != -1 ? true : false),
+        isMac: /Mac/i.test(navigator.platform),
         // runner options
         options: {
             linkLibs: true, // if true, libs will be loaded via script tag in bela frame
@@ -96,7 +96,7 @@ $(function () {
         window.addEventListener('keydown', function (event) {
             let toolbar = w2ui.tb_editor
             // cmd + enter - will reload and run current spec
-            if (event.metaKey && event.keyCode == 13) {
+            if ((event.metaKey || event.ctrlKey) && event.keyCode == 13) {
                 getSettings().then(settings => {
                     if (settings.start == 'manifest') {
                         w2ui.suite.startTime = (new Date()).getTime()
@@ -1175,11 +1175,9 @@ $(function () {
     }
 
     function logsShow() {
-        let toolbar = w2ui.tb_editor
-        let selection = w2ui.tb_editor.get('action').selected
         let html = `
         <div id="global_log">
-            <div class="gloabl-hotkeys">⌘ + enter - to reload & run current test</div>
+            <div class="gloabl-hotkeys">${app.isMac ? '⌘ + enter' : 'ctrl + enter'} - to reload & run current test</div>
         `
         app.logs.items.forEach(log => {
             html += `<div>${log}</div>`
