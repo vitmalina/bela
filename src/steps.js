@@ -164,7 +164,7 @@ class BelaSteps {
         // returns jQuery subject
         let result = this.proc.current ? this.proc.current.result : {}
         if (typeof selector != 'string') {
-            return { success: false, details: 'Selector should be a string', msg: 'Wrong selector' }
+            return { success: false, details: 'Selector should be a string', msg: 'Invalid selector' }
         }
         result.selector = selector
         if (selector.substr(0, 1) === '@') {
@@ -186,6 +186,9 @@ class BelaSteps {
     find(selector, options = {}) {
         // returns jQuery subject
         let result = this.proc.current ? this.proc.current.result : {}
+        if (typeof selector != 'string') {
+            return { success: false, details: 'Selector should be a string', msg: 'Invalid selector' }
+        }
         result.selector = selector
         if (selector == null || selector === '') {
             return { success: false, error: 'Selector is not provided' }
@@ -208,6 +211,9 @@ class BelaSteps {
     closest(selector, options = {}) {
         // returns jQuery subject
         let result = this.proc.current ? this.proc.current.result : {}
+        if (typeof selector != 'string') {
+            return { success: false, details: 'Selector should be a string', msg: 'Invalid selector' }
+        }
         result.selector = selector
         if (selector == null || selector === '') {
             return { success: false, error: 'Selector is not provided' }
@@ -241,6 +247,9 @@ class BelaSteps {
 
     if(selector, options = {}) {
         let result = this.proc.current ? this.proc.current.result : {}
+        if (typeof selector != 'string') {
+            return { success: false, details: 'Selector should be a string', msg: 'Invalid selector' }
+        }
         if (selector.substr(0, 1) === '@') {
             selector = this.proc.scope[selector.substr(1)]
             if (typeof selector != 'string') {
