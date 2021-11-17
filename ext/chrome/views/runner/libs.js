@@ -4578,7 +4578,9 @@ class BelaSteps {
     get(selector, options = {}) {
         // returns jQuery subject
         let result = this.proc.current ? this.proc.current.result : {}
-        selector = String(selector)
+        if (typeof selector != 'string') {
+            return { success: false, details: 'Selector should be a string', msg: 'Wrong selector' }
+        }
         result.selector = selector
         if (selector.substr(0, 1) === '@') {
             selector = this.proc.scope[selector.substr(1)]
