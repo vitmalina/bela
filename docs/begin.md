@@ -13,7 +13,7 @@ Does not modify the subject
 
 ```js
 bela.begin('Group 1')
-````
+```
 
 ## Arguments
 
@@ -35,4 +35,4 @@ bela
         .click()
         ...
     .end()
-````
+```

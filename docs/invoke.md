@@ -14,7 +14,7 @@ Modify the subject
 ```js
 bela.invoke('next')
 bela.invoke('addClass', 'myClass')
-````
+```
 
 ## Arguments
 
@@ -41,4 +41,4 @@ Multiple argumetns
 bela
     .get('#element-by-id')
     .invoke('addClass', ['myClass1', 'myClass2', 'myClass3'])
-````
+```

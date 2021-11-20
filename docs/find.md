@@ -14,7 +14,7 @@ Modifies the subject
 ```js
 bela.get('#form')
     .find('input#name')
-````
+```
 
 ## Arguments
 

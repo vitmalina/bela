@@ -14,7 +14,7 @@ Modifies the subject
 ```js
 bela.get('#form')
     .closest('div.parent')
-````
+```
 
 ## Arguments
 

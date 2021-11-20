@@ -15,7 +15,7 @@ Modifies the subject
 bela.get('#element-by-id')
 bela.get('button:contains(Save)')
 bela.get('@button')
-````
+```
 
 ## Arguments
 
@@ -36,15 +36,6 @@ bela
     .get('#element-by-id')
     .click()
 ```
-
-Remember element and use it later
-```js
-bela
-    .let('button:contains(Save)', 'saveButton')
-    ...
-    .get('@saveButton')
-    .click()
-````
 
 ## Other jQuery methods
 

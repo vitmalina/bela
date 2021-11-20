@@ -17,7 +17,7 @@ bela.open('http://localhost/app/index.html?param=val', { force: true }) // if ur
 bela.open('index.html')    // previous host and folder
 bela.open('/index.html')   // previous host
 bela.open('#some-route')   // previous host, folder and file, just a different hash
-````
+```
 
 ## Arguments
 
@@ -39,12 +39,4 @@ Open a url
 
 ```js
 bela.open('https://amazon.com')
-```
-
-Open a url saved in a variable
-
-```js
-bela
-    .let('url',' https://amazon.com')
-    .open('@url')
 ```

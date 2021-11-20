@@ -15,7 +15,7 @@ Does not modify the subject
 bela.if(function (subj, win, runner) {
     // any js code
 })
-````
+```
 
 ## Arguments
 

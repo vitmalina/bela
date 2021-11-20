@@ -15,7 +15,7 @@ Does not modify the subject
 bela.then(function (subj, win, runner) {
     // any js code
 })
-````
+```
 
 ## Arguments
 
@@ -36,8 +36,6 @@ This first example show how to use various runtime variables.
 ```js
 bela
     .get('body')
-    .let('a', 1)
-    .let('b', "some string")
     .then(function(subj, win) {
         console.log('Testing Window', win, 'or', this.win)
         console.log('Current subject', subj, 'or', this.proc.subject)
