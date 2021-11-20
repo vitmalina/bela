@@ -4097,7 +4097,13 @@ class BelaRunner {
             return
         }
         if (step && Array.isArray(step.steps) && step.steps.length > 0 && !step.options.skip) {
+            let name = step.options.name || step.id
+            if (step.cmd == 'group') name = step.args[0]
+            if (step.cmd == 'then') {
+                name = step.options.name || step.result.msg
+            }
             this.proc.parents.push({
+                name,
                 steps: this.proc.steps,
                 index: this.proc.index,
                 edata: this.trigger({ type: 'enterSub', phase: 'before', target: step.id })
@@ -4415,12 +4421,6 @@ class BelaRunner {
 }
 class BelaSteps {
 
-    break() {
-        // jump to last task in the group
-        this.proc.index = this.proc.steps.length
-        return { success: true, details: 'Exit current "begin"' }
-    }
-
     log(msg, options = {}) {
         delete options.args
         delete options.repeat
@@ -4435,6 +4435,22 @@ class BelaSteps {
 
     pause() {
         this.pause('Paused.')
+    }
+
+    break(name) {
+        let ind = this.proc.parents.map(el => el.name).indexOf(name)
+        if (name) {
+            if (ind === -1) {
+                return { success: false, error: `Group "${name}" does not exist.` }
+            }
+            this.proc.parents.splice(ind + 1, 1000)
+            this.proc.index = this.proc.steps.length
+            return { success: true, details: `Exit "${name}"` }
+        } else {
+            // jump to last task in the group
+            this.proc.index = this.proc.steps.length
+            return { success: true, details: 'Exit current group' }
+        }
     }
 
     listen() {
@@ -4622,6 +4638,9 @@ class BelaSteps {
             result.msg = func
             func = options.args[1]
             options.args = options.args.splice(1)
+        }
+        if (options.name) {
+            result.msg = options.name
         }
         if (typeof func == 'function') {
             return func.call(this, edata, ...options.args.splice(1))

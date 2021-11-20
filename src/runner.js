@@ -496,7 +496,13 @@ class BelaRunner {
             return
         }
         if (step && Array.isArray(step.steps) && step.steps.length > 0 && !step.options.skip) {
+            let name = step.options.name || step.id
+            if (step.cmd == 'group') name = step.args[0]
+            if (step.cmd == 'then') {
+                name = step.options.name || step.result.msg
+            }
             this.proc.parents.push({
+                name,
                 steps: this.proc.steps,
                 index: this.proc.index,
                 edata: this.trigger({ type: 'enterSub', phase: 'before', target: step.id })
