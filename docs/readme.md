@@ -46,7 +46,7 @@ In order to write meaninful test you need to be able to do 3 things:
 
 | Command | Descritpion |
 | ------- | ----------- |
-| [should](should.md#should)    | make assertions about the page |
+| [should](should.md#should)    | make assertions about the subject |
 | [log](log.md#log)             | log a message |
 | [error](error.md#error)       | log an error |
 
@@ -54,6 +54,6 @@ In order to write meaninful test you need to be able to do 3 things:
 
 | Command | Descritpion |
 | ------- | ----------- |
-| [add](custom.add.md#custom.add)                     | add a custom command |
-| [remove](custom.remove.md#custom.remove)            | remove a custom command |
-| [overwrite](custom.overwrite.md#custom.overwrite)   | overwrite existing command (any, not just custom commands)  |
+| [add](custom.add.md)               | add a custom command |
+| [remove](custom.remove.md)         | remove a custom command |
+| [overwrite](custom.overwrite.md)   | overwrite existing command (any, not just custom commands)  |

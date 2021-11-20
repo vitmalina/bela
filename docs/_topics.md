@@ -12,3 +12,5 @@
 5. Previous command details
 
 6. Executing custom functions, see layout/6.spec.js
+
+7. example of assertions with Chai
