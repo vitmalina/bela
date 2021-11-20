@@ -72,6 +72,8 @@ An object with multiple assertions.
 
 ## Examples
 
+### Common assertions
+
 ```js
 bela.open('http://google.com')
     .get('a')
@@ -79,8 +81,32 @@ bela.open('http://google.com')
         'have.length': 10,
         'contain.text': 'a',
         'have.css': {
-            display: 'flex',
-            opacity: 1
+            opacity: 1,
+            display: 'flex'
+        }
+    })
+```
+
+### Custom assertions with chai
+
+Chai assertion library is already available. You can use all its chains `expect`, `assert`, and `should`. As well as `chai-string` lirbrary.
+
+```js
+bela.open('http://google.com')
+    .get('a')
+    .then(event => {
+        let error = false
+        try {
+            chai.expect(event.subj.length).to.be.greaterThan(10)
+            chai.expect(event.subj.text()).to.contain('a')
+            chai.expect(event.subj.css('opacity')).to.equal('1')
+            chai.expect(event.subj[0].style.display).to.equal('flex')
+        } catch (e) {
+            error = true
+            bela.error('Assertions fail', { assertion: true, msg: e.message })
+        }
+        if (!error) {
+            bela.log('All good', { assertion: true })
         }
     })
 ```

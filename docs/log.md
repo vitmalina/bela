@@ -17,9 +17,9 @@ bela.log('Page ready')
 
 ## Arguments
 
-- name `string`
+- text `string`
 
-Name to save subejct as.
+Text to log.
 
 - options `object`
 

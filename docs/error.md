@@ -17,9 +17,9 @@ bela.error('Page is not ready')
 
 ## Arguments
 
-- name `string`
+- text `string`
 
-Name to save subejct as.
+Text of the error to log.
 
 - options `object`
 
