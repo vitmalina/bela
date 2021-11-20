@@ -1,6 +1,6 @@
 # reload
 
-Reloads current page
+Reloads current page.
 
 ## Syntax
 
@@ -25,8 +25,8 @@ bela.reload()
 
 ## Examples
 
-Realod current page, same as open with `{ reload: true }`
+Realod current page, same as `bela.open(url, { reload: true })`
 
 ```js
-bela.realod({ timeout: 10000 })
+bela.realod()
 ```

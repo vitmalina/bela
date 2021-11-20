@@ -5,14 +5,20 @@ Execute a function.
 ## Syntax
 
 ```js
-bela.then(func, [options])
+bela.then([message], func, [options])
 ```
 Does not modify the subject.
 
 ## Usage
 
 ```js
-bela.then(function (subj, win, runner) {
+bela.then(function (event) {
+    // any js code
+})
+```
+
+```js
+bela.then('Getting ready', event => {
     // any js code
 })
 ```
@@ -27,6 +33,7 @@ A JavaScript function to execute. It can be a regular or an arrow function. If i
 
 | Option | Default | Description |
 | ------ | ------- | ----------- |
+| name | `undefined` | name to be used with `.break` command |
 | timeout | 4000 | Timeout for the command to complete |
 
 ## Examples
@@ -42,14 +49,14 @@ bela
         console.log('Runtime variables (if any)', event.scope, 'or', this.proc.scope)
         console.log('Runner', event.self, 'or', this)
         console.log('All steps', this.steps)
-        console.log('Current results', this.proc.results)
+        console.log('Current results', this.proc.current.result)
         console.log('Current step', this.proc.current)
         console.log('Previous step', this.proc.previous)
         // if nothing is retured, it will consider it a success
     })
 ```
 
-You can add steps dynamically within `then` function. All steps are executes sequentially, meaning, next step will be executed when previous step is done. Therefore, it does not matter where you add steps, however, if you add it withing `then` command, they will be considered sub steps.
+You can add steps dynamically within `then` function. All steps are executes sequentially, meaning, next step will be executed when previous step is done. Therefore, it does not matter where you add steps, however, if you add it within `then` command, they will be considered sub steps.
 
 ```js
 bela

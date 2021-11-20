@@ -1,6 +1,6 @@
 # begin
 
-Start a group of commands
+Start a group of commands.
 
 ## Syntax
 

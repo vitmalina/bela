@@ -25,7 +25,7 @@ A selector to filter DOM elements.
 
 - func `function`
 
-A JavaScript function to execute. It can be a regular or an arrow function. If it is a regular function it will have `this` context point to the BelaRunner that executes commands (same as the third argument). If it is an arrow function, then `this` variable will be undefined.
+A JavaScript function to execute. It can be a regular or an arrow function. If it is a regular function it will have `this` context point to the BelaRunner that executes commands. If it is an arrow function, then `this` variable will be undefined.
 
 ## Example
 

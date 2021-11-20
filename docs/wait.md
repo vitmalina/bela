@@ -20,7 +20,7 @@ bela.wait(100)
 bela.wait('page.reload') // waits for actual page reload
 bela.wait('page.ready') // waits for dom to be ready
 bela.wait('body', 'to.be.visible')
-bela.wait('network', '**/link/to/path/*.js') // uses minimatch libaray, see https://github.com/motemen/minimatch-cheat-sheet
+bela.wait('network', '**/link/to/path/*.js') // uses minimatch library
 ```
 
 ## Arguments
@@ -52,8 +52,7 @@ State to wait for
 
 - route `string` | `array` | `object`
 
-If it is a string, it is the url of the route (uses minimatch library for url matching). If it is an array, it is an array of
-strings or objects for url matching. If it is an object, it can be of the following structure:
+If it is a string, it is the url of the route (uses [minimatch](https://github.com/motemen/minimatch-cheat-sheet) library for url matching). If it is an array, it is an array of strings or objects for url matching. If it is an object, it can be of the following structure:
 ```js
 {
     url: 'string',                   // uses minimatch library
@@ -63,7 +62,7 @@ strings or objects for url matching. If it is an object, it can be of the follow
 
 ```
 
-## Example
+## Examples
 
 ### Wait XXX milliseconds
 
@@ -98,7 +97,7 @@ Wait for page load
 ```js
 bela
     .open('http://test.com')
-    .wait('pare.reload')
+    .wait('page.reload')
 ```
 
 ### Wait for network routes
