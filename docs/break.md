@@ -1,6 +1,6 @@
 # berak
 
-Exists current group of commands.
+Exit current group of commands.
 
 ## Syntax
 

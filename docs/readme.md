@@ -21,10 +21,10 @@ In order to write meaninful test you need to be able to do 3 things:
 | [then](then.md#then)      | execute a function |
 | [if](if.md#if)            | execute a function, if the element present |
 | [tag](tag.md#tag)         | tag previous command with a message |
-| [pause](pause.md#pause)   | pauses in debugger |
-| [begin](begin.md#begin)   | begins the group of commands |
-| [end](end.md#end)         | ends the group of commands |
-| [break](berak.md#berak)   | exists current group of commands |
+| [pause](pause.md#pause)   | pause in debugger |
+| [begin](begin.md#begin)   | begin a group of commands |
+| [end](end.md#end)         | end the group of commands |
+| [break](break.md#break)   | exit current group of commands |
 
 ### Emulate user actions
 
