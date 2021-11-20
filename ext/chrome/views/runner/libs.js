@@ -4414,89 +4414,6 @@ class BelaRunner {
     }
 }
 class BelaSteps {
-    let(key, options) {
-        let data = {}
-        let opt = options.args[1]
-        if (typeof key == 'string') {
-            // ignore @ sign if first
-            if (key.substr(0, 1) === '@') {
-                key = key.substr(1)
-            }
-            data[key] = (opt != null && typeof opt == 'object' ? $.extend(true, {}, opt) : opt)
-        } else if (key != null && typeof key == 'object') {
-            $.extend(true, data, key)
-        }
-        this.proc.scope = this.proc.scope || {}
-        Object.keys(data).forEach(k => {
-            if (typeof k == 'string' && k.substr(0, 1) === '@') {
-                k = k.substr(1)
-                data[k] = data['@' + k]
-                delete data['@' + k]
-            }
-            if (data[k].repeat != null && typeof data[k].repeat == 'number') {
-                delete data[k].repeat
-            }
-            this.proc.scope[k] = data[k]
-        })
-        let msg = ''
-        let kk = Object.keys(data)
-        if (kk.length == 1) {
-            let tmp = data[kk[0]]
-            msg = `@${kk[0]}=${tmp != null && typeof tmp == 'object' ? '[Object]' : tmp }`
-        } else {
-            msg = kk.map(k=>'@'+k).join(', ')
-        }
-        return { msg, details: data }
-    }
-
-    network(key, options) {
-        // similar to let, but with type = network
-        // network('@lenta', 'http://lenta.ru')
-        // network('@wiki', { method: 'GET', url: 'https://en.wikipedia.org*' })
-        // network({
-        //     '@param1': 'http://w2ui.com',
-        //     '@param2': { method: 'POST', url: 'https://w2ui.com' }
-        // })
-        let urls = {}
-        let opt  = options.args[1]
-        if (typeof key == 'string') {
-            // ignore @ sign if first
-            if (key.substr(0, 1) === '@') {
-                key = key.substr(1)
-            }
-            urls[key] = (opt != null && typeof opt == 'object' ? $.extend(true, {}, opt) : opt)
-        } else if (key != null && typeof key == 'object') {
-            $.extend(true, urls, key)
-        }
-        this.proc.scope = this.proc.scope || {}
-        Object.keys(urls).forEach(k => {
-            if (k.substr(0, 1) === '@') {
-                k = k.substr(1)
-                urls[k] = urls['@' + k]
-                delete urls['@' + k]
-            }
-            if (typeof urls[k] == 'string') {
-                urls[k] = { method: '*', url: urls[k] }
-            }
-            if (urls[k].method == null) {
-                urls[k].method = '*'
-            }
-            if (urls[k].repeat != null && typeof urls[k].repeat == 'number') {
-                delete urls[k].repeat
-            }
-            urls[k].type = 'network'
-            this.proc.scope[k] = urls[k]
-        })
-        let msg = ''
-        let kk = Object.keys(urls)
-        if (kk.length == 1) {
-            msg = `@${kk[0]}=${urls[kk[0]].url}`
-        } else {
-            msg = kk.map(k => '@' + k).join(', ')
-        }
-        return { msg, details: urls }
-    }
-
     listen() {
         // todo: should listen to network requests
     }
@@ -4536,14 +4453,6 @@ class BelaSteps {
         } else {
             go_url = this.loc.host + this.loc.folder + url
         }
-        if (url[0] == '@') {
-            let name = String(url).substr(1)
-            go_url = this.proc.scope[name]
-            if (typeof go_url != 'string') {
-                result.details = `Define variable ${options.args[0]} using "let" command as a string.`
-                return { success: false, msg: `Undefined ${options.args[0]}` }
-            }
-        }
         this.proc.current.result.url = go_url
         if (options.msg) {
             this.proc.current.result.msg = options.msg
@@ -4582,14 +4491,6 @@ class BelaSteps {
             return { success: false, details: 'Selector should be a string', msg: 'Invalid selector' }
         }
         result.selector = selector
-        if (selector.substr(0, 1) === '@') {
-            selector = this.proc.scope[selector.substr(1)]
-            result.selector += ' = ' + selector
-            if (typeof selector != 'string') {
-                result.details = `Define variable ${options.args[0]} using "let" command as a string.`
-                return { success: false, msg: `Undefined ${options.args[0]}` }
-            }
-        }
         let res = $(selector, this.win.document)
         if (res.length > 0) {
             return { subject: res, count: res.length, details: `${res.length} elements` }
@@ -4608,13 +4509,6 @@ class BelaSteps {
         if (selector == null || selector === '') {
             return { success: false, error: 'Selector is not provided' }
         }
-        if (selector.substr(0, 1) === '@') {
-            selector = this.proc.scope[selector.substr(1)]
-            if (typeof selector != 'string') {
-                result.details = `Define variable ${options.args[0]} using "let" command as a string.`
-                return { success: false, msg: `Undefined ${options.args[0]}` }
-            }
-        }
         let res = $(this.proc.subject).find(selector)
         if (res.length > 0) {
             return { subject: res, count: res.length, details: `${res.length} elements` }
@@ -4632,13 +4526,6 @@ class BelaSteps {
         result.selector = selector
         if (selector == null || selector === '') {
             return { success: false, error: 'Selector is not provided' }
-        }
-        if (selector.substr(0, 1) === '@') {
-            selector = this.proc.scope[selector.substr(1)]
-            if (typeof selector != 'string') {
-                result.details = `Define variable ${options.args[0]} using "let" command as a string.`
-                return { success: false, msg: `Undefined ${options.args[0]}` }
-            }
         }
         let res = $(this.proc.subject).closest(selector)
         if (res.length > 0) {
@@ -4664,13 +4551,6 @@ class BelaSteps {
         let result = this.proc.current ? this.proc.current.result : {}
         if (typeof selector != 'string') {
             return { success: false, details: 'Selector should be a string', msg: 'Invalid selector' }
-        }
-        if (selector.substr(0, 1) === '@') {
-            selector = this.proc.scope[selector.substr(1)]
-            if (typeof selector != 'string') {
-                result.details = `Define variable ${options.args[0]} using "let" command as a string.`
-                return { success: false, msg: `Undefined ${options.args[0]}` }
-            }
         }
         let res = $(selector, this.win.document)
         let cond = 'exists'
@@ -4785,16 +4665,6 @@ class BelaSteps {
                             let tmp = data.url
                             delete data.url
                             Object.assign(data, tmp)
-                        } else if (typeof dtl == 'string' && dtl.substr(0, 1) == '@') {
-                            name = dtl
-                            let tmp = this.proc.scope[dtl.substr(1)]
-                            if (tmp == null) {
-                                errors.push(`Undefined variable "${dtl}"`)
-                            } else if (tmp.type == 'network') {
-                                data = { method: tmp.method, url: tmp.url, loaded: false, count: tmp.count || 1 }
-                            } else {
-                                data = { method: '*', url: tmp, loaded: false, count: 1 }
-                            }
                         }
                         data.name = name
                         names.push(name)
@@ -4809,21 +4679,11 @@ class BelaSteps {
                     break
                 }
                 default: {
-                    if (param[0] == '@') {
-                        param = this.proc.scope[param.substr(1)]
-                        if (typeof param != 'string') {
-                            result.details = `Define variable ${options.args[0]} using "let" command.`
-                            return { success: false, msg: `Undefined ${options.args[0]}`}
-                        }
-                        options.type = 'dom.change'
-                        result.msg = `${options.args[0]} "${options.args[1]}"`
-                    } else {
-                        // assume it is a selector
-                        options.type = 'dom.change'
-                        result.selector = param
-                        result.msg = `${options.args[1]} = "${options.args[2] != null ? options.args[2] : ''}"`
-                        result.details = `Wait for "${param}" "${options.args[1]}" "${options.args[2] != null ? options.args[2] : ''}"`
-                    }
+                    // assume it is a selector
+                    options.type = 'dom.change'
+                    result.selector = param
+                    result.msg = `${options.args[1]} = "${options.args[2] != null ? options.args[2] : ''}"`
+                    result.details = `Wait for "${param}" "${options.args[1]}" "${options.args[2] != null ? options.args[2] : ''}"`
                 }
             }
         }
@@ -5514,9 +5374,6 @@ class BelaSteps {
                 case 'not.exist':
                     negative = true
                 case 'exist': {
-                    if (value.substr(0, 1) == '@') {
-                        value = runner.proc.scope[value.substr(1)]
-                    }
                     let count = $(value, runner.win.document).length
                     if ((negative && count !== 0) || (!negative && count === 0)) {
                         details = {
