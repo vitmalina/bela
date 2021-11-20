@@ -1,6 +1,6 @@
-# get
+# closest
 
-Get one or more DOM elements by a selector or an alias.
+Get one or more DOM elements by a selector.
 
 ## Syntax
 
@@ -14,7 +14,6 @@ Modifies the subject
 ```js
 bela.get('#element-by-id')
 bela.get('button:contains(Save)')
-bela.get('@button')
 ```
 
 ## Arguments
@@ -40,8 +39,8 @@ bela
 ## Other jQuery methods
 
 Bela directly maps only 3 jQuery methods
-- `get` - to get (find) element on the page
-- `find` - to find a closest child relative to current element
-- `closest` - to find a closes parent relative to current element
+- [get](get.md#get) - to get (find) element on the page
+- [find](find.md#find) - to find a closest child relative to current element
+- [closest](closest.md#closest) - to find a closes parent relative to current element
 
 You can use other jQuery methods. See [invoke](invoke.md#invoke) command.

@@ -16,17 +16,16 @@ In order to write meaninful test you need to be able to do 3 things:
 | [get](get.md#get)             | get element on the page |
 | [find](find.md#find)          | find child element(s) within the current subject |
 | [closest](closest.md#closest) | find closest parent starting with the current subject |
-| [then](then.md#then)          | execute a custom function |
-| [wait](wait.md#wait)          | wait for something to happen |
+| [invoke](invoke.md#invoke)    | invoke a method on the current subject |
 
 #### Other
 
 | Command | Descritpion |
 | ------- | ----------- |
+| [wait](wait.md#wait)          | wait for something to happen |
 | [if](if/if.md#if)             | execute a function, if the element present |
-| [invoke](invoke.md#invoke)    | invoke a method on the current subject |
+| [then](then.md#then)          | execute a custom function |
 | [tag](tag.md#tag)             | tag previous command with a message |
-| [network](network.md#network) | define a route to watch |
 
 ## Emulate user actions
 
@@ -65,7 +64,6 @@ In order to write meaninful test you need to be able to do 3 things:
 | [end](end.md#end)         | ends the group of commands |
 | [break](berak.md#berak)   | exists current group of commands |
 | [pause](pause.md#pause)   | pauses in debugger |
-| [tag](tag.md#tag)         | adds a tag to previous command |
 
 ## Custom Commands
 

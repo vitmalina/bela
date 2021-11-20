@@ -36,12 +36,16 @@ This first example show how to use various runtime variables.
 ```js
 bela
     .get('body')
-    .then(function(subj, win) {
-        console.log('Testing Window', win, 'or', this.win)
-        console.log('Current subject', subj, 'or', this.proc.subject)
-        console.log('Runtime variables', this.proc.scope)
+    .then(function(event) {
+        console.log(event)
+        console.log('Testing Window', event.win, 'or', this.win)
+        console.log('Current subject', event.subj, 'or', this.proc.subject)
+        console.log('Runtime variables (if any)', event.scope, 'or', this.proc.scope)
+        console.log('Runner', event.self, 'or', this)
         console.log('All steps', this.steps)
-        console.log('Current step', this.proc.steps[this.proc.index])
+        console.log('Current results', this.proc.results)
+        console.log('Current step', this.proc.current)
+        console.log('Previous step', this.proc.previous)
         // if nothing is retured, it will consider it a success
     })
 ```

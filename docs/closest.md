@@ -1,6 +1,6 @@
 # closest
 
-Find the closes parent starting at the current subject that matches the selector
+Find the closest parent that matches the selector, starting at the current subject. This command can only be used after `.get()` command.
 
 ## Syntax
 
@@ -38,8 +38,8 @@ bela.get('#form')
 ## Other jQuery methods
 
 Bela directly maps only 3 jQuery methods
-- `get` - to get (find) element on the page
-- `find` - to find a closest child relative to current element
-- `closest` - to find a closes parent relative to current element
+- [get](get.md#get) - to get (find) element on the page
+- [find](find.md#find) - to find a closest child relative to current element
+- [closest](closest.md#closest) - to find a closes parent relative to current element
 
 You can use other jQuery methods. See [invoke](invoke.md#invoke) command.
