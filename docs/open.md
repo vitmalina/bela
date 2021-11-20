@@ -7,7 +7,7 @@ Navigate to the specified URL.
 ```js
 bela.open(url, [options])
 ```
-Does not modify the subject
+Does not modify the subject.
 
 ## Usage
 

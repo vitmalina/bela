@@ -7,7 +7,7 @@ Get one or more DOM elements by a selector.
 ```js
 bela.get(selector, [options])
 ```
-Modifies the subject
+Modifies the subject.
 
 ## Usage
 

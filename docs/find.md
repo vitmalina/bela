@@ -1,13 +1,13 @@
 # find
 
-Find elements within current subject that match the selector. This command can only be used after `.get()` command.
+Find elements within the current subject that match the selector. This command can only be used after `.get()` command.
 
 ## Syntax
 
 ```js
 bela.find(selector, [options])
 ```
-Modifies the subject
+Modifies the subject.
 
 ## Usage
 

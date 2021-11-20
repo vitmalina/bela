@@ -5,9 +5,9 @@ Find the closest parent that matches the selector, starting at the current subje
 ## Syntax
 
 ```js
-bela.closes(selector, [options])
+bela.closest(selector, [options])
 ```
-Modifies the subject
+Modifies the subject.
 
 ## Usage
 

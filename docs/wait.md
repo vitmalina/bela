@@ -1,6 +1,6 @@
 # wait
 
-wait for something to happen
+Wait for something to happen.
 
 ## Syntax
 
@@ -11,7 +11,7 @@ bela.wait('page.reload')
 bela.wait('network', route)
 bela.wait(selector, state)
 ```
-Does not modify the subject
+Does not modify the subject.
 
 ## Usage
 

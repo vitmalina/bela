@@ -1,13 +1,13 @@
 # begin
 
-start a group
+Start a group of commands
 
 ## Syntax
 
 ```js
 bela.begin(name, options)
 ```
-Does not modify the subject
+Does not modify the subject.
 
 ## Usage
 

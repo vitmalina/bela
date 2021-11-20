@@ -23,8 +23,8 @@ In order to write meaninful test you need to be able to do 3 things:
 | Command | Descritpion |
 | ------- | ----------- |
 | [wait](wait.md#wait)          | wait for something to happen |
-| [if](if/if.md#if)             | execute a function, if the element present |
-| [then](then.md#then)          | execute a custom function |
+| [if](if.md#if)             | execute a function, if the element present |
+| [then](then.md#then)          | execute a function |
 | [tag](tag.md#tag)             | tag previous command with a message |
 
 ## Emulate user actions

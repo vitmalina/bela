@@ -1,13 +1,13 @@
 # then
 
-execute a function
+Execute a function.
 
 ## Syntax
 
 ```js
 bela.then(func, [options])
 ```
-Does not modify the subject
+Does not modify the subject.
 
 ## Usage
 
@@ -37,7 +37,6 @@ This first example show how to use various runtime variables.
 bela
     .get('body')
     .then(function(event) {
-        console.log(event)
         console.log('Testing Window', event.win, 'or', this.win)
         console.log('Current subject', event.subj, 'or', this.proc.subject)
         console.log('Runtime variables (if any)', event.scope, 'or', this.proc.scope)
@@ -86,7 +85,7 @@ bela
 bela
     .then(event => {
         console.log('Called once')
-        return { success: false, error: 'Errro message' }
+        return { success: false, error: 'Error message' }
     })
 ```
 OR

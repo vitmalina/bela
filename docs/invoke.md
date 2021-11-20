@@ -1,13 +1,13 @@
 # invoke
 
-Invoke a method on the current subject
+Invoke a method on the current subject.
 
 ## Syntax
 
 ```js
 bela.invoke(method, [args])
 ```
-Modify the subject
+Modifies the subject.
 
 ## Usage
 

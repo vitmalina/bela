@@ -1,18 +1,18 @@
 # if
 
-execute a function if dom element exists
+Execute a function if DOM element exists.
 
 ## Syntax
 
 ```js
 bela.if(selector, func)
 ```
-Does not modify the subject
+Does not modify the subject.
 
 ## Usage
 
 ```js
-bela.if(function (subj, win, runner) {
+bela.if('#screen-lock', function (event) {
     // any js code
 })
 ```
@@ -33,7 +33,7 @@ This command is intended for clean ups. Use it when you need to perform some act
 
 ```js
 bela
-    .if('#screen-lock', (el) => {
-        el.remove()
+    .if('#screen-lock', event => {
+        event.subj.remove()
     })
 ```

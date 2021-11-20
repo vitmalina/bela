@@ -7,7 +7,7 @@ Reloads current page
 ```js
 bela.reload([options])
 ```
-Does not modify the subject
+Does not modify the subject.
 
 ## Usage
 
