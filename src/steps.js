@@ -1,7 +1,4 @@
 class BelaSteps {
-    listen() {
-        // todo: should listen to network requests
-    }
 
     break() {
         // jump to last task in the group
@@ -23,6 +20,10 @@ class BelaSteps {
 
     pause() {
         this.pause('Paused.')
+    }
+
+    listen() {
+        // todo: should listen to network requests
     }
 
     open(url, options = {}) {
@@ -317,21 +318,27 @@ class BelaSteps {
                     case 'not.to.have.text':
                         negative = true
                     case 'to.have.text': {
-                        if ((!negative && res.text() !== options.args[2]) || (negative && res.text() === options.args[2])) {
+                        let text = options.args[2]
+                        if ((!negative && res.text() !== text) || (negative && res.text() === text)) {
                             return { repeat: true }
                         }
                         break
                     }
+                    case 'not.to.contain.text':
+                        negative = true
+                    case 'to.contain.text': {
+                        let text = options.args[2]
+                        if ((!negative && res.text().indexOf(text) !== -1) || (negative && res.text().indexOf(text) === -1)) {
+                            return { repeat: true }
+                        }
+                        break
+                    }
+                    case 'not.to.have.class':
+                        negative = true
                     case 'to.have.class': {
+                        let text = options.args[2]
                         result.count = res.length
-                        if (!res.hasClass(options.args[2])) {
-                            return { repeat: true }
-                        }
-                        break
-                    }
-                    case 'to.not.have.class': {
-                        result.count = res.length
-                        if (res.hasClass(options.args[2])) {
+                        if ((!negative && !res.hasClass(text)) || (negative && res.hasClass(text))) {
                             return { repeat: true }
                         }
                         break
@@ -357,7 +364,7 @@ class BelaSteps {
                         break
                     }
                     case 'to.be.removed':
-                    case 'to.not.exist': {
+                    case 'not.to.exist': {
                         if (res.length > 0) {
                             return { repeat: true }
                         }
