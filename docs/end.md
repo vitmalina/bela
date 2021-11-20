@@ -1,6 +1,6 @@
 # end
 
-End a group of commands.
+End the group of commands.
 
 ## Syntax
 
