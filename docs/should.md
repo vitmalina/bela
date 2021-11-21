@@ -89,7 +89,7 @@ bela.open('http://google.com')
 
 ### Custom assertions with chai
 
-Chai assertion library is already available. You can use all its chains `expect`, `assert`, and `should`. As well as `chai-string` lirbrary.
+Chai assertion library is already available. You can use all its chains `expect`, `assert`, and `should`, as well as `chai-string` lirbrary. Similar as previous test:
 
 ```js
 bela.open('http://google.com')
