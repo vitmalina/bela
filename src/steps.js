@@ -797,7 +797,7 @@ class BelaSteps {
                 }
             }
             subj.each((ind, el) => {
-                if (el.tagName === 'SELECT') {
+                if (el.tagName === 'SELECT' || options.force === true) {
                     if (typeof val == 'number') {
                         el.selectedIndex = val
                         result.msg = 'index='+val
