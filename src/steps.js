@@ -425,7 +425,7 @@ class BelaSteps {
         let subj = this.proc.subject
         let win  = this.win
         let result = this.proc.current.result
-        let events = ['mousemove', 'mouseover', 'mousedown', 'mouseup', 'click']
+        let events = ['mouseover', 'mouseenter', 'mousemove', 'mousedown', 'mouseup', 'click']
         if (options.double) {
             events.push('mousedown', 'mouseup', 'click')
         }
@@ -502,7 +502,7 @@ class BelaSteps {
         // options.delay
         // options.multiple
         // options.*key (modifiers)
-        // options.positon = 'center'
+        // options.position = 'center'
 
         if (options.delay == null) options.delay = 10
         if (options.multiple == null) options.multiple = false
@@ -657,8 +657,6 @@ class BelaSteps {
             view: this.win
         }
         let keys = {
-            '{'         : '{',
-            '}'         : '}',
             'selectall' : String.fromCharCode(0),
             'tab'       : String.fromCharCode(9),
             'enter'     : String.fromCharCode(13),
@@ -689,7 +687,14 @@ class BelaSteps {
         }
         text = String(text)
         if (options.parse !== false) {
-            text = text.replace(/({(.*?)})/g, (token) => keys[token.substr(1, token.length-2)])
+            text = text.replace(/({(.*?)})/g, token => {
+                let t = token.substr(1, token.length-2)
+                if (keys[t]) {
+                    return keys[t]
+                } else {
+                    return String.fromCharCode(t)
+                }
+            })
         }
 
         let prom = new Promise((resolve, reject) => {
