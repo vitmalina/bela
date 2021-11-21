@@ -12,8 +12,8 @@ Modifies the subject.
 ## Usage
 
 ```js
-bela.invoke('next')
-bela.invoke('addClass', 'myClass')
+bela.invoke(method)
+bela.invoke(method, ...args)
 ```
 
 ## Arguments

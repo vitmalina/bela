@@ -5,8 +5,7 @@ Emulate mouse click. It will send a series of events `mouseover`, `mouseenter`, 
 ## Syntax
 
 ```js
-bela.click(position)
-bela.click(options)
+bela.click([position], [options])
 ```
 Does not modify the subject.
 
@@ -14,9 +13,9 @@ Does not modify the subject.
 
 ```js
 bela.click()
-bela.click('center')
-bela.click({ double: true })
-bela.click({ multiple: true })
+bela.click(position)
+bela.click(options)
+bela.click(position, options)
 ```
 
 ## Arguments
@@ -62,5 +61,6 @@ An object with options
 ```js
 bela
     .get('a')
+    .click('center')
     .click({ multiple: true, delay: 500 })
 ```

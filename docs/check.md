@@ -12,7 +12,8 @@ Does not modify the subject.
 ## Usage
 
 ```js
-bela.check([options])
+bela.check()
+bela.check(options)
 ```
 
 ## Arguments

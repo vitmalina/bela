@@ -12,8 +12,8 @@ Modifies the subject.
 ## Usage
 
 ```js
-bela.get('#element-by-id')
-bela.get('button:contains(Save)')
+bela.get(selector)
+bela.get(selector, options)
 ```
 
 ## Arguments

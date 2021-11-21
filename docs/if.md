@@ -12,9 +12,7 @@ Does not modify the subject.
 ## Usage
 
 ```js
-bela.if('#screen-lock', function (event) {
-    // any js code
-})
+bela.if(selector, func)
 ```
 
 ## Arguments

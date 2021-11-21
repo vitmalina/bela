@@ -13,8 +13,10 @@ Does not modify the subject.
 ## Usage
 
 ```js
-bela.trigger('mousedown')
-bela.trigger(['mousedown', 'mouseup', 'click'])
+bela.trigger(event)
+bela.trigger(event, options)
+bela.trigger(events)
+bela.trigger(events, options)
 ```
 
 ## Arguments

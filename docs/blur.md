@@ -12,7 +12,8 @@ Does not modify the subject.
 ## Usage
 
 ```js
-bela.blur([options])
+bela.blur()
+bela.blur(options)
 ```
 
 ## Arguments

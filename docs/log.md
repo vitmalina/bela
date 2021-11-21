@@ -12,7 +12,8 @@ Does not modify the subject.
 ## Usage
 
 ```js
-bela.log('Page ready')
+bela.log(text)
+bela.log(text, options)
 ```
 
 ## Arguments

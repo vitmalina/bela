@@ -12,7 +12,8 @@ Does not modify the subject.
 ## Usage
 
 ```js
-bela.custom.remove('login', { silent: true })
+bela.custom.remove(command)
+bela.custom.remove(command, options)
 ```
 
 ## Arguments

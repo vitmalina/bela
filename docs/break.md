@@ -12,8 +12,15 @@ Does not modify the subject.
 ## Usage
 
 ```js
-bela.berak('Group 1')
+bela.berak()
+bela.break(namem)
 ```
+
+## Arguments
+
+- name `string`
+
+Name of the group to break.
 
 
 ## Examples

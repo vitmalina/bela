@@ -5,22 +5,17 @@ Execute a function.
 ## Syntax
 
 ```js
-bela.then([message], func, [options])
+bela.then([name], func, [options])
 ```
 Does not modify the subject.
 
 ## Usage
 
 ```js
-bela.then(function (event) {
-    // any js code
-})
-```
-
-```js
-bela.then('Getting ready', event => {
-    // any js code
-})
+bela.then(func)
+bela.then(name, func)
+bela.then(func, options)
+bela.then(name, func, options)
 ```
 
 ## Arguments
@@ -33,7 +28,7 @@ A JavaScript function to execute. It can be a regular or an arrow function. If i
 
 | Option | Default | Description |
 | ------ | ------- | ----------- |
-| name | `undefined` | name to be used with `.break` command |
+| name | `undefined` | name to be used with [break](break.md#break) command |
 | timeout | 4000 | Timeout for the command to complete |
 
 ## Examples

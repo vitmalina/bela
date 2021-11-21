@@ -16,11 +16,6 @@ Does not modify the subject.
 ## Usage
 
 ```js
-bela.wait(100)
-bela.wait('page.reload') // waits for actual page reload
-bela.wait('page.ready') // waits for dom to be ready
-bela.wait('body', 'to.be.visible')
-bela.wait('network', '**/link/to/path/*.js') // uses minimatch library
 ```
 
 ## Arguments
@@ -63,6 +58,14 @@ If it is a string, it is the url of the route (uses [minimatch](https://github.c
 ```
 
 ## Examples
+
+```js
+bela.wait(100)
+bela.wait('page.reload') // waits for actual page reload
+bela.wait('page.ready') // waits for dom to be ready
+bela.wait('body', 'to.be.visible')
+bela.wait('network', '**/link/to/path/*.js') // uses minimatch library
+```
 
 ### Wait XXX milliseconds
 

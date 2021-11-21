@@ -12,7 +12,7 @@ Does not modify the subject.
 ## Usage
 
 ```js
-bela.tag('Finished well')
+bela.tag(text)
 ```
 
 ## Arguments

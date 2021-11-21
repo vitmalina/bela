@@ -12,7 +12,8 @@ Does not modify the subject.
 ## Usage
 
 ```js
-bela.clear([options])
+bela.clear()
+bela.clear(options)
 ```
 
 ## Arguments

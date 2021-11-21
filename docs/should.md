@@ -13,28 +13,10 @@ Does not modify the subject.
 ## Usage
 
 ```js
-// operates w/o current subject
-bela.should('exist', '#selector')
-bela.should('not.exist', '#selector')
-// operate over the current subject
-bela.should('have.text', 'Click')
-bela.should('have.css', {
-    display: 'block',
-    opacity: 1
-})
-// mutliple assertions
-bela.should({
-    'have.length', 1,
-    'contain.text': 'Click',
-    'not.contain.text.1': 'some',   // adding .XXX will allow to process multiple commands of same name
-    'not.contain.text.2': 'other',
-    'have.class': 'active',
-    'not.have.class': 'disabled',
-    'have.attr': {
-        name: 'custom_name',
-        id: 'custom'
-    }
-})
+bela.should(param, value)
+bela.should(param, value, options)
+bela.should(multiple)
+bela.should(multiple, options)
 ```
 
 ## Arguments
@@ -61,6 +43,10 @@ Name of the assertion.
 | `have.css`        | Element has specified css |
 | `have.attr`       | Element has specified attributes |
 | `have.prop`       | Element has specified properties |
+
+- value `string`
+
+Value of the assertion.
 
 - options `object`
 
@@ -109,4 +95,30 @@ bela.open('http://google.com')
             bela.log('All good', { assertion: true })
         }
     })
+```
+
+### Other examples
+```js
+// operates w/o current subject
+bela.should('exist', '#selector')
+bela.should('not.exist', '#selector')
+// operate over the current subject
+bela.should('have.text', 'Click')
+bela.should('have.css', {
+    display: 'block',
+    opacity: 1
+})
+// mutliple assertions
+bela.should({
+    'have.length', 1,
+    'contain.text': 'Click',
+    'not.contain.text.1': 'some',   // adding .XXX will allow to process multiple commands of same name
+    'not.contain.text.2': 'other',
+    'have.class': 'active',
+    'not.have.class': 'disabled',
+    'have.attr': {
+        name: 'custom_name',
+        id: 'custom'
+    }
+})
 ```

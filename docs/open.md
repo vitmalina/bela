@@ -12,11 +12,8 @@ Does not modify the subject.
 ## Usage
 
 ```js
-bela.open('http://localhost/app/index.html')
-bela.open('http://localhost/app/index.html?param=val', { force: true }) // if url is the same, force reload
-bela.open('index.html')    // previous host and folder
-bela.open('/index.html')   // previous host
-bela.open('#some-route')   // previous host, folder and file, just a different hash
+bela.open(url)
+bela.open(url, options)
 ```
 
 ## Arguments
@@ -38,5 +35,9 @@ If the URL is the same as previously opened, the open command will do nothing. T
 Open a url
 
 ```js
-bela.open('https://amazon.com')
+bela.open('http://localhost/app/index.html')
+bela.open('http://localhost/app/index.html?param=val', { force: true }) // if url is the same, force reload
+bela.open('index.html')    // previous host and folder
+bela.open('/index.html')   // previous host
+bela.open('#some-route')   // previous host, folder and file, just a different hash
 ```

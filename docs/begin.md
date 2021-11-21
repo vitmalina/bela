@@ -5,14 +5,15 @@ Start a group of commands.
 ## Syntax
 
 ```js
-bela.begin(name, options)
+bela.begin(name, [options])
 ```
 Does not modify the subject.
 
 ## Usage
 
 ```js
-bela.begin('Group 1')
+bela.begin(name)
+bela.begin(name, options)
 ```
 
 ## Arguments
@@ -23,7 +24,13 @@ Name to save subejct as.
 
 - options `object`
 
-An array of options, default values are `{ expanded: false, skip: false, autorun: false }`
+An array of options, default values are
+```js
+{
+    skip: false,     // skip entire block
+    expanded: false  // expand block in UI
+}
+```
 
 ## Examples
 

@@ -12,7 +12,7 @@ Does not modify the subject.
 ## Usage
 
 ```js
-bela.drag({ divX: 10, divY: 10 })
+bela.drag(options)
 ```
 
 ## Arguments

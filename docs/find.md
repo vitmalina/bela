@@ -12,8 +12,8 @@ Modifies the subject.
 ## Usage
 
 ```js
-bela.get('#form')
-    .find('input#name')
+bela.find(selector)
+bela.find(selector, options)
 ```
 
 ## Arguments

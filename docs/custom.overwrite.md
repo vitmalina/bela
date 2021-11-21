@@ -5,16 +5,15 @@ Overwrites a command.
 ## Syntax
 
 ```js
-bela.custom.overwite('click', [def_options], func)
+bela.custom.overwite(command, [def_options], func)
 ```
 Does not modify the subject.
 
 ## Usage
 
 ```js
-bela.custom.overwite('click', [def_options], (param, options) => {
-    // custom code
-})
+bela.custom.overwite(command, func)
+bela.custom.overwite(command, def_options, func)
 ```
 
 ## Arguments

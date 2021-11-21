@@ -12,8 +12,8 @@ Modifies the subject.
 ## Usage
 
 ```js
-bela.get('#form')
-    .closest('div.parent')
+bela.closest(selector)
+bela.closest(selector, options)
 ```
 
 ## Arguments

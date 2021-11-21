@@ -13,6 +13,7 @@ Does not modify the subject.
 
 ```js
 bela.reload()
+bela.reload(options)
 ```
 
 ## Arguments

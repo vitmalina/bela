@@ -12,7 +12,8 @@ Does not modify the subject.
 ## Usage
 
 ```js
-bela.focus([options])
+bela.focus()
+bela.focus(options)
 ```
 
 ## Arguments

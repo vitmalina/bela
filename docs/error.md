@@ -12,7 +12,8 @@ Does not modify the subject.
 ## Usage
 
 ```js
-bela.error('Page is not ready')
+bela.error(text)
+bela.error(text, options)
 ```
 
 ## Arguments

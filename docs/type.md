@@ -12,8 +12,8 @@ Does not modify the subject.
 ## Usage
 
 ```js
-bela.type('some text')
-bela.type('some text', { delay: 100 })
+bela.type(text)
+bela.type(text, options)
 ```
 
 ## Arguments

@@ -12,7 +12,8 @@ Does not modify the subject.
 ## Usage
 
 ```js
-bela.custom.add('login', { timeout: 10000 }, (param, options) => {} )
+bela.custom.add(command, func)
+bela.custom.add(command, def_options, func)
 ```
 
 ## Arguments
