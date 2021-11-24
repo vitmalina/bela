@@ -8,7 +8,7 @@
         "48": "img/old/icon-48.png",
         "128": "img/old/icon-128.png"
     },
-    "content_security_policy": "default-src 'self' 'unsafe-eval' http://localhost:* https://localhost:* https://*.w2ui.com; style-src 'unsafe-inline'; script-src-attr 'unsafe-inline'; img-src 'self' data:; font-src 'self' data: 'unsafe-inline';",
+    "content_security_policy": "default-src 'self' 'unsafe-eval' http://localhost:* https://localhost:* https://w2ui.com; style-src 'unsafe-inline'; script-src-attr 'unsafe-inline'; img-src 'self' data:; font-src 'self' data: 'unsafe-inline';",
     "background": {
         "persist": false,
         "scripts": ["scripts/bg.js"]

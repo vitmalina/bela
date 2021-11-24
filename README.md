@@ -1,10 +1,10 @@
-[Documentation](docs#documentation)
-
 # Bela Automation
 
 Bela is a front-end automation tool for the browser
 - Browser extension where you write and test your automation
 - Headless runner for your tests to integrate with CI/CD pipeline (coming soon)
+
+[Documentation](docs#documentation)
 
 ## Installation
 

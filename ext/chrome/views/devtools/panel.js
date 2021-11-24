@@ -4,14 +4,12 @@
 // - dev panel resize - kills the event
 
 $(function () {
-    require.config({ paths: { 'vs': '/views/libs/monaco-editor/vs' }});
-    let mocaco
+    let monaco
     let timer = {}
     let defaults = { "start": "editor", "baseURL": "", "specsBaseURL": "" }
     let testQueue
     window.app = {
-        init,
-        initLayout,
+        version: 0.1,
         position: 'bottom',
         tabId: chrome.devtools.inspectedWindow.tabId,
         isMac: /Mac/i.test(navigator.platform),
@@ -38,6 +36,8 @@ $(function () {
         files: {},          // custom commands and libraries
         breakPoints: [],    // ids of all break points
         // other functions
+        init,
+        initLayout,
         msgProcess,
         msg,                // short message on the bottom
         message,            // slide down message on top
@@ -65,6 +65,7 @@ $(function () {
         runTests,
         runNext
     }
+    require.config({ paths: { 'vs': '/views/libs/monaco-editor/vs' }})
     require(['vs/editor/editor.main'], function(editor) {
         monaco = editor
         defineLanguage()
@@ -73,6 +74,15 @@ $(function () {
     return
 
     function init() {
+        // check updates
+        fetch('https://w2ui.com/bela/check-updates.js')
+            .then(res => res.json())
+            .then(data => {
+                let ver = parseFloat(data.latest)
+                if (ver > app.version) {
+                    $('#global_log').append('<div>' + w2utils.base64decode(data.info) + '</div>')
+                }
+            })
         // console.log('DEV TOOLS: init')
         $('#app-container').w2layout(config.layout)
         $().w2sidebar(config.steps)
