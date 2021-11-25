@@ -1,7 +1,4 @@
 // This file runs in the background
-// let listeners = []
-// let runnerStates = {}
-
 if (chrome.runtime) {
     chrome.runtime.onMessage.addListener(processMessage)
     chrome.runtime.onMessageExternal.addListener(processMessage)
@@ -34,32 +31,3 @@ function getActiveTab(callback) {
         callback(tabs[0])
     })
 }
-
-// Network Listeners
-// chrome.webRequest.onBeforeRequest.addListener(
-//     (req) => {
-//         listeners.forEach((listen) => {
-//             if (listen.tabId == req.tabId && (listen.type == req.type || listen.type == '*')) {
-//                 // console.log('req', req)
-//                 getActiveTab((tab) => {
-//                     chrome.tabs.sendMessage(tab.id, {
-//                         type: 'network',
-//                         phase: 'before',
-//                         request: req
-//                     })
-//                 })
-//             }
-//         })
-//         return { cancel: false }
-//     },
-//     { urls: ["<all_urls>"] },
-//     ["blocking"]
-// )
-
-
-// function getUUID() {
-//     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-//         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-//         return v.toString(16);
-//     })
-// }
