@@ -1,0 +1,26 @@
+{
+    "manifest_version": 3,
+    "name": "Bela Automation",
+    "description": "UI Automation tool that works in the DevConsole. Ideal for writing e2e front-end tests.",
+    "version": "0.1",
+    "icons": {
+        "450": "img/icon.png"
+    },
+    "action": {
+        "default_title": "Bela Automation",
+        "default_popup": "views/popup.html",
+        "default_icon": "img/icon.png"
+    },
+    "content_scripts": [{
+        "matches": ["<all_urls>"],
+        "run_at": "document_idle",
+        "js": ["context.js"],
+        "all_frames": false
+    }],
+     "web_accessible_resources": [{
+        "matches":  ["<all_urls>"],
+        "resources": ["/views/*"]
+     }],
+    "permissions": [],
+    "devtools_page": "views/devtools/_index.html"
+}
