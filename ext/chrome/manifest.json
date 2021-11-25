@@ -1,7 +1,8 @@
 {
     "manifest_version": 2,
     "name": "Bela Automation",
-    "version": "1.0",
+    "description": "UI Automation tool that works in the DevConsole. Ideal for writing e2e front-end tests.",
+    "version": "0.1",
     "icons": {
         "450": "img/icon.png"
     },
@@ -10,27 +11,15 @@
         "default_popup": "views/popup.html"
     },
     "content_security_policy": "default-src 'self' 'unsafe-eval' http://localhost:* https://localhost:* https://w2ui.com; style-src 'unsafe-inline'; script-src-attr 'unsafe-inline'; img-src 'self' data:; font-src 'self' data: 'unsafe-inline';",
-    "background": {
-        "persist": false,
-        "scripts": ["scripts/bg.js"]
-    },
-    "content_scripts": [
-        {
-            "matches": ["<all_urls>"],
-            "run_at": "document_idle",
-            "js": ["scripts/context.js"],
-            "all_frames": false
-        }
-    ],
+    "content_scripts": [{
+        "matches": ["<all_urls>"],
+        "run_at": "document_idle",
+        "js": ["context.js"],
+        "all_frames": false
+    }],
      "web_accessible_resources": [
         "/views/*"
      ],
-    "permissions": [
-        "*://*/*",
-        "storage",
-        "nativeMessaging",
-        "webRequest",
-        "webRequestBlocking"
-    ],
+    "permissions": [],
     "devtools_page": "views/devtools/_index.html"
 }
