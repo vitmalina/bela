@@ -93,7 +93,7 @@ $(function () {
         let id = `${parent}/${name}`
         let test = w2ui.suite.get(id)
         if (test != null) {
-            console.log(`TEST "${id}" is REPLACED with a new version.`)
+            // console.log(`TEST "${id}" is REPLACED with a new version.`)
             test.text = name.replace(order, '')
             if (order.test(name)) {
                 test.order = parseInt(name.match(order)[0])

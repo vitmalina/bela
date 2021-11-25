@@ -35,6 +35,13 @@ $(function () {
         results: {},        // current runner info
         files: {},          // custom commands and libraries
         breakPoints: [],    // ids of all break points
+        logs: {
+            items: [],
+            add: logsAdd,
+            append: logsAppend,
+            show: logsShow,
+            clear: logsClear
+        },
         // other functions
         init,
         initLayout,
@@ -54,13 +61,6 @@ $(function () {
         updateTimerMsg,
         showResults,
         resetResults,
-        logs: {
-            items: [],
-            add: logsAdd,
-            append: logsAppend,
-            show: logsShow,
-            clear: logsClear
-        },
         resetSubIcons,
         runTests,
         runNext
