@@ -1209,7 +1209,8 @@ $(function () {
             w2ui.suite.running = true
             toolbar.hide('run-all', 'auto-run')
             toolbar.show('stop-all', 'run-time')
-            app.logs.add(`RUN ${ids.length} test(s).`)
+            app.logs.add('******')
+            app.logs.add(`<span class="run-start">RUN ${ids.length} test(s).</span>`)
             w2ui.suite.count = { pass: 0, fail: 0 }
             w2ui.suite.startTime = (new Date()).getTime()
             timer.runTimeMsg = setInterval(() => {
@@ -1256,15 +1257,16 @@ $(function () {
             toolbar.hide('stop-all', 'run-time')
             toolbar.show('run-all', 'auto-run')
             if (w2ui.suite.startTime) {
-                let pass = '<span class="run-success">All PASS!</span>'
+                let pass = '<span class="run-total-good">All PASS!</span>'
                 if (w2ui.suite.count.fail !== 0) {
-                    pass = `<span class="run-success">pass=${w2ui.suite.count.pass}</span>,
-                            <span class="run-error">failed=${w2ui.suite.count.fail}</span>`
+                    pass = `<span class="run-total-good">pass=${w2ui.suite.count.pass}</span>,
+                            <span class="run-total-bad">failed=${w2ui.suite.count.fail}</span>`
                 }
                 app.logs.add(`FINISHED -
                     <span class="run-time">
                         ${w2utils.interval((new Date()).getTime() - w2ui.suite.startTime)}
-                    </span>, ${pass}`)
+                    </span>`)
+                app.logs.add(pass)
             } else {
                 let log = 'Steps done'
                 if (w2ui.steps.startTime) {
