@@ -2,7 +2,6 @@
 // - manifest - show results of already finished test
 // - config - as separate menu (not in editor/manifest)
 // - dev panel resize - kills the event
-
 $(function () {
     let monaco
     let timer = {}
@@ -552,6 +551,7 @@ $(function () {
                         if (options && options.expanded) {
                             w2ui.steps.expand(event.target)
                         }
+                        w2ui.steps.scrollIntoView()
                         break
                     }
                     case 'enter:before': {
@@ -1364,10 +1364,10 @@ $(function () {
             let testFailed
             if (errors.length > 0) {
                 testFailed = true
-                w2ui.suite.count.fail++
+                if (w2ui.suite.count) w2ui.suite.count.fail++
             } else {
                 testFailed = false
-                w2ui.suite.count.pass++
+                if (w2ui.suite.count) w2ui.suite.count.pass++
             }
             if (w2ui.suite.testStartTime) {
                 let int = w2utils.interval((new Date()).getTime() - w2ui.suite.testStartTime)

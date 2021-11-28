@@ -15,7 +15,7 @@ let config = {
         style: 'background-color: #f3f4f5; border-top: 1px solid #fff; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd',
         tooltip: 'bottom|right',
         items: [
-            { id: 'reload-manifest', icon: 'w2ui-icon-reload', hidden: true },
+            { id: 'reload-manifest', type: 'button', icon: 'w2ui-icon-reload', hidden: true },
             { id: 'action', type: 'menu-radio', icon: 'icon-type',
                 selected: 'editor',
                 text(item) {
@@ -42,15 +42,19 @@ let config = {
             },
             { id: 'spacer', type: 'spacer' },
             { id: 'insert', type: 'button', text: 'Parse Tests', hidden: true },
-            { id: 'run-time', type: 'html', html: `<span id="run-time-msg" style="padding-right: 10px">0:00</span>`, hidden: true },
-            { id: 'auto-run', type: 'html', html: `
-                <input type="text" tabindex="100" class="hidden" onfocus="$('#auto-run-flag').focus()">
-                <label class="check-label">
-                    <input type="checkbox" id="auto-run-flag" tabindex="4" style="position: relative; top: 2px; left: -3px;">
-                    <span onmouseover="$(this).w2tag('Auto run current test on page reload', { className: 'w2ui-light', top: -6, position: 'right|left' })"
-                        onmouseout="$(this).w2tag()">Auto Run</span>
-                </label>
-                ` },
+            { id: 'run-time', type: 'html', hidden: true, style: "padding: 10px 0 0 5px",
+                html: `<span id="run-time-msg" style="padding-right: 10px">0:00</span>`
+            },
+            { id: 'auto-run', type: 'html', style: "padding: 8px 0 0 5px",
+                html: `
+                    <input type="text" tabindex="100" class="hidden" onfocus="$('#auto-run-flag').focus()">
+                    <label class="check-label">
+                        <input type="checkbox" id="auto-run-flag" tabindex="4" style="position: relative; top: 2px; left: -3px;">
+                        <span onmouseover="$(this).w2tag('Auto run current test on page reload', { className: 'w2ui-light', top: -6, position: 'right|left' })"
+                            onmouseout="$(this).w2tag()">Auto Run</span>
+                    </label>
+                `
+            }
         ],
         onClick(event) {
             app.panelAction(event)
@@ -77,7 +81,7 @@ let config = {
             { id: 'step-in', type: 'button', action: 'run', tooltip: 'Step in', icon: 'icon-step-in', disabled: true },
             { id: 'step-out', type: 'button', action: 'run', tooltip: 'Step out', icon: 'icon-step-out', disabled: true },
             { id: 'break_info', type: 'break', hidden: true },
-            { id: 'info', type: 'html', html: '...', hidden: true },
+            { id: 'info', type: 'html', html: '...', hidden: true, style: "padding: 10px 0 0 5px" },
             { type: 'spacer' },
             { id: 'settings', type: 'menu-check', icon: 'icon-cog',
                 overlay: { openAbove: false },
@@ -132,6 +136,8 @@ let config = {
                     this.set('action', { action: 'run', icon: 'icon-play', tooltip: 'Run at selected command' })
                     this.show('info', 'break_info')
                     this.set('info', { html: '<span class="cmd">Done</span> - <a onclick="app.runner.reset()">Reset</a>'})
+                    this.disable('step-over', 'step-in', 'step-out')
+                    w2ui.steps.unselect()
                     break
                 }
                 case 'select': {
@@ -214,9 +220,13 @@ let config = {
                     let item = w2ui.steps.get(stepId)
                     let expanded = item.expanded
                     let hasSubSteps = item.nodes && item.nodes.length > 0 ? true : false
-                    // if (event.target == 'step-in') expanded = true
+                    if (event.target == 'step-in' && !expanded) {
+                        w2ui.steps.expand(stepId)
+                        item._wasExpanded = true
+                    }
                     w2ui.steps.resetSubIcons(stepId)
                     app.runner.action(event.target, { stepId, expanded, hasSubSteps }, ready)
+
                     break
                 }
 
@@ -285,7 +295,7 @@ let config = {
         handle: {
             size: 18,
             style: `height: 22px; width: 20px; margin-top: 0px; margin-left: -15px;`,
-            content: `<div onclick="w2ui.steps.setBreakPoint(this, event)"
+            html: `<div onclick="w2ui.steps.setBreakPoint(this, event)"
                 ${w2utils.tooltip('Set break point', { className: 'w2ui-light', left: -6, position: 'top|bottom' })}></div>`
         },
         nodes: [],
