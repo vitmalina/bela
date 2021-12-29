@@ -10,7 +10,7 @@ Bela is a front-end automation tool for the browser
 
 Download from [Chrome Store](https://chrome.google.com/webstore/detail/bela-automation/dlipdffgmdlelcagomicaolmhonhnblj)
 
-Or install latest from `ext/chrome`. To install manually, go to Chrome's extension manager, click "Developer mode" and then "Load unpacked" and point to right folder.
+Or install latest from `ext/chrome`. To install manually, go to Chrome's extension, click "Developer mode" and then "Load unpacked" and point to right folder.
 
 ## Getting started
 
