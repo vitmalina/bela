@@ -1,14 +1,16 @@
 # Bela Automation
 
 Bela is a front-end automation tool for the browser
-- Browser extension where you write and test your automation
-- Headless runner for your tests to integrate with CI/CD pipeline (coming soon)
+- It is an extension where you write and test your e2e test
+- Integration with CI server is coming soon
 
 [Documentation](docs#documentation)
 
 ## Installation
 
-Chromium extension is locatted in `ext/chrome` browser. I have not yet publish it to the Chrome store, as it is not ready, but you can install it manually if you go to Chrome's extension manager, click "Developer mode" and then "Load unpacked" and point to the specified directory.
+Download from [Chrome Store](https://chrome.google.com/webstore/detail/bela-automation/dlipdffgmdlelcagomicaolmhonhnblj)
+
+Or install latest from `ext/chrome`. To install manually, go to Chrome's extension manager, click "Developer mode" and then "Load unpacked" and point to right folder.
 
 ## Getting started
 
