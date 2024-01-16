@@ -4,7 +4,7 @@ Bela is a front-end automation tool for the browser
 - It is an extension where you write and test your e2e test
 - Integration with CI server is coming soon
 
-[Read.me Docs files](docs#documentation)   |   [Documentaion on Github Pages](https://vitmalina.github.io/bela/)
+Documentation: [Read.me](docs#documentation) -- | -- [Github Pages](https://vitmalina.github.io/bela/)
 
 ## Installation
 
